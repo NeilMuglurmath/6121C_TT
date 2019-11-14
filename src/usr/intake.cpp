@@ -22,7 +22,7 @@ void intakeOpControl()
 	{
 		intakeIn();
 	}
-	else if (master.getDigital(ControllerDigital::up))
+	else if (master.getDigital(ControllerDigital::L2))
 	{
 		intakeOutSlow();
 	}

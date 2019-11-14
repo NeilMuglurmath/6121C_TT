@@ -5,5 +5,6 @@ void liftHoldDown();
 void liftMove(double degrees);
 void liftPower(int voltage);
 void liftOpControl();
+void expand();
 
 #endif
