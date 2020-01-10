@@ -43,7 +43,6 @@ void competition_initialize() {}
 void autonomous()
 {
 	expand();
-	chassisJankAutoJawn();
 }
 
 /**

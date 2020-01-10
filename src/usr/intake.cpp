@@ -8,7 +8,8 @@ void intakeIn()
 }
 void intakeOff()
 {
-	intake.moveVoltage(0);
+	intake.moveVelocity(0);
+	intake.setBrakeMode(AbstractMotor::brakeMode::hold);
 }
 
 void intakeOutSlow()

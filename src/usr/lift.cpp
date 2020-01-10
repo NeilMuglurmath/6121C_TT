@@ -1,9 +1,9 @@
 #include "main.h"
 
-Motor motorLift(PORT_LIFT, false, AbstractMotor::gearset::red);
+Motor motorLift(PORT_LIFT, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
 
 const int LIFT_LOWER_LIMIT = 0;
-const int LIFT_UPPER_LIMIT = 390;
+const int LIFT_UPPER_LIMIT = 1622;
 
 void liftHoldDown()
 {
@@ -13,7 +13,7 @@ void liftHoldDown()
 
 void liftMove(double degrees)
 {
-	motorLift.moveRelative(degrees, 100);
+	motorLift.moveRelative(degrees, 200);
 }
 
 void liftPower(int voltage)
@@ -51,15 +51,16 @@ void liftOpControl()
 	else
 	{
 		liftHoldDown();
+		// motorLift.moveVoltage(0);
 	}
 	// printf("%.1f %.1f\n", motorLift.getPosition(), motorLift.getPower());
 }
 
 void expand()
 {
-	motorLift.moveAbsolute(LIFT_UPPER_LIMIT, 100);
+	motorLift.moveAbsolute(LIFT_UPPER_LIMIT, 200);
 	pros::delay(900);
-	motorLift.moveAbsolute(LIFT_LOWER_LIMIT, 100);
+	motorLift.moveAbsolute(LIFT_LOWER_LIMIT, 200);
 	pros::delay(700);
 	anglerExpand();
 }
