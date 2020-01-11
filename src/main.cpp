@@ -9,6 +9,8 @@
 void initialize()
 {
 	pros::lcd::initialize();
+	chassisInit();
+	intakeInit();
 }
 
 /**
@@ -42,7 +44,7 @@ void competition_initialize() {}
  */
 void autonomous()
 {
-	expand();
+	testProfiling();
 }
 
 /**
@@ -60,10 +62,8 @@ void autonomous()
  */
 void opcontrol()
 {
-	chassisInit();
 	while (true)
 	{
-		intakeOpControl();
 		anglerOpControl();
 		liftOpControl();
 		pros::delay(20);

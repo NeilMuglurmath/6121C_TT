@@ -33,3 +33,18 @@ void intakeOpControl()
 		intakeOff();
 	}
 }
+
+void _intakeTask(void *param)
+{
+	while (true)
+	{
+		intakeOpControl();
+		pros::delay(20);
+	}
+}
+
+void intakeInit()
+{
+	std::string text("Chassis");
+	pros::Task my_task(_intakeTask, &text, "");
+}

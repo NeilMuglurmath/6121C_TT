@@ -5,5 +5,6 @@ void intakeIn();
 void intakeOff();
 void intakeOutSlow();
 void intakeOpControl();
+void intakeInit();
 
 #endif

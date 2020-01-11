@@ -53,7 +53,11 @@ void liftOpControl()
 		liftHoldDown();
 		// motorLift.moveVoltage(0);
 	}
-	// printf("%.1f %.1f\n", motorLift.getPosition(), motorLift.getPower());
+}
+
+void liftPrintInfo()
+{
+	printf("Pos: %.1f Target Pos: %.1f, Efficiency: %.1f\n", motorLift.getPosition(), motorLift.getTargetPosition(), motorLift.getEfficiency());
 }
 
 void expand()
