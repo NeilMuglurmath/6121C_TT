@@ -6,9 +6,9 @@ const double MAX_VEL = 1.2;
 const double MAX_ACC = 1;
 const double MAX_JERK = 4;
 
-const double DISTANCE_KP = 0;
-const double DISTANCE_KI = 0;
-const double DISTANCE_KD = 0;
+const double DISTANCE_KP = .0003;
+const double DISTANCE_KI = 0.0005;
+const double DISTANCE_KD = 0.000001;
 
 const double TURN_KP = 0;
 const double TURN_KI = 0;
@@ -18,30 +18,36 @@ const double ANGLE_KP = 0;
 const double ANGLE_KI = 0;
 const double ANGLE_KD = 0;
 
-QLength lastX = 0_in;
-QLength lastY = 0_in;
-QAngle lastTheta = 0_deg;
-
-std::string lastPath("");
-
 auto chassis = ChassisControllerBuilder()
 				   .withMotors({PORT_LEFT_BACK, PORT_LEFT_FRONT}, {PORT_RIGHT_BACK, PORT_RIGHT_FRONT})
-				   .withDimensions(AbstractMotor::gearset::green, {{4.125_in, 10_in}, 128})
+				   .withDimensions(AbstractMotor::gearset::green, {{4.125_in, 10_in}, 700})
+				   .withGains({DISTANCE_KP, DISTANCE_KI, DISTANCE_KD}, {TURN_KP, TURN_KI, TURN_KD}, {ANGLE_KP, ANGLE_KI, ANGLE_KD})
+				   .withDerivativeFilters(
+					   std::make_unique<AverageFilter<3>>(), // Distance controller filter
+					   std::make_unique<AverageFilter<3>>(), // Turn controller filter
+					   std::make_unique<AverageFilter<3>>()  // Angle controller filter
+					   )
 				   .build();
 
 auto chassisAuto = ChassisControllerBuilder()
 					   .withMotors({PORT_LEFT_BACK, PORT_LEFT_FRONT}, {-PORT_RIGHT_BACK, -PORT_RIGHT_FRONT})
-					   .withDimensions(AbstractMotor::gearset::green, {{4.125_in, 10_in}, 128})
+					   .withDimensions(AbstractMotor::gearset::green, {{4.125_in, 10_in}, 700})
+					   .withGains({DISTANCE_KP, DISTANCE_KI, DISTANCE_KD}, {TURN_KP, TURN_KI, TURN_KD}, {ANGLE_KP, ANGLE_KI, ANGLE_KD})
+					   .withDerivativeFilters(
+						   std::make_unique<AverageFilter<3>>(), // Distance controller filter
+						   std::make_unique<AverageFilter<3>>(), // Turn controller filter
+						   std::make_unique<AverageFilter<3>>()  // Angle controller filter
+						   )
 					   .build();
-
-auto profileController = AsyncMotionProfileControllerBuilder()
-							 .withLimits({MAX_VEL, MAX_ACC, MAX_JERK})
-							 .withOutput(chassisAuto)
-							 .buildMotionProfileController();
 
 void _chassisArcade()
 {
 	chassis->getModel()->arcade(master.getAnalog(ControllerAnalog::rightX), master.getAnalog(ControllerAnalog::leftY));
+}
+
+void _printChassisInfo()
+{
+	c
 }
 
 void _chassisTask(void *parameter)
@@ -53,12 +59,28 @@ void _chassisTask(void *parameter)
 	}
 }
 
-void chassisForward(okapi::QLength inches, std::string pathName)
+void chassisForward(okapi::QLength inches, bool async)
 {
-	profileController->generatePath({{lastX, lastY, lastTheta}, {inches, lastY, lastTheta}}, pathName);
-	lastPath = pathName;
-	profileController->setTarget(pathName);
-	profileController->waitUntilSettled();
+	if (async)
+	{
+		chassisAuto->moveDistanceAsync(inches);
+	}
+	else
+	{
+		chassisAuto->moveDistance(inches);
+	}
+}
+
+void chassisBackward(okapi::QLength inches, bool async)
+{
+	if (async)
+	{
+		chassisAuto->moveDistanceAsync(-inches);
+	}
+	else
+	{
+		chassisAuto->moveDistance(-inches);
+	}
 }
 
 void chassisInit()
