@@ -2,43 +2,39 @@
 
 Controller master;
 
-const double MAX_VEL = 1.2;
-const double MAX_ACC = 1;
-const double MAX_JERK = 4;
+const double MAX_VEL = 1.4;
+const double MAX_ACC = 1.5;
+const double MAX_JERK = 7;
 
-const double DISTANCE_KP = .0003;
-const double DISTANCE_KI = 0.0005;
-const double DISTANCE_KD = 0.000001;
+QLength lastX = 0_in;
+QLength lastY = 0_in;
+QAngle lastTheta = 0_deg;
 
-const double TURN_KP = 0;
-const double TURN_KI = 0;
-const double TURN_KD = 0;
+std::string lastPath("");
+std::string lastTurnPath("");
 
-const double ANGLE_KP = 0;
-const double ANGLE_KI = 0;
-const double ANGLE_KD = 0;
+QLength WHEELBASE_WIDTH = 10_in;
+QLength WHEEL_DIAM = 1.77_in;
 
 auto chassis = ChassisControllerBuilder()
 				   .withMotors({PORT_LEFT_BACK, PORT_LEFT_FRONT}, {PORT_RIGHT_BACK, PORT_RIGHT_FRONT})
-				   .withDimensions(AbstractMotor::gearset::green, {{4.125_in, 10_in}, 700})
-				   .withGains({DISTANCE_KP, DISTANCE_KI, DISTANCE_KD}, {TURN_KP, TURN_KI, TURN_KD}, {ANGLE_KP, ANGLE_KI, ANGLE_KD})
-				   .withDerivativeFilters(
-					   std::make_unique<AverageFilter<3>>(), // Distance controller filter
-					   std::make_unique<AverageFilter<3>>(), // Turn controller filter
-					   std::make_unique<AverageFilter<3>>()  // Angle controller filter
-					   )
+				   .withDimensions(AbstractMotor::gearset::blue, {{1.77_in, 10_in}, imev5BlueTPR})
 				   .build();
 
 auto chassisAuto = ChassisControllerBuilder()
 					   .withMotors({PORT_LEFT_BACK, PORT_LEFT_FRONT}, {-PORT_RIGHT_BACK, -PORT_RIGHT_FRONT})
-					   .withDimensions(AbstractMotor::gearset::green, {{4.125_in, 10_in}, 700})
-					   .withGains({DISTANCE_KP, DISTANCE_KI, DISTANCE_KD}, {TURN_KP, TURN_KI, TURN_KD}, {ANGLE_KP, ANGLE_KI, ANGLE_KD})
-					   .withDerivativeFilters(
-						   std::make_unique<AverageFilter<3>>(), // Distance controller filter
-						   std::make_unique<AverageFilter<3>>(), // Turn controller filter
-						   std::make_unique<AverageFilter<3>>()  // Angle controller filter
-						   )
+					   .withDimensions(AbstractMotor::gearset::blue, {{1.77_in, 10_in}, imev5BlueTPR})
 					   .build();
+
+auto profileController = AsyncMotionProfileControllerBuilder()
+							 .withLimits({MAX_VEL, MAX_ACC, MAX_JERK})
+							 .withOutput(chassisAuto)
+							 .buildMotionProfileController();
+
+auto turnProfileController = AsyncMotionProfileControllerBuilder()
+								 .withLimits({MAX_VEL, MAX_ACC, MAX_JERK})
+								 .withOutput(chassis)
+								 .buildMotionProfileController();
 
 void _chassisArcade()
 {
@@ -47,7 +43,6 @@ void _chassisArcade()
 
 void _printChassisInfo()
 {
-	c
 }
 
 void _chassisTask(void *parameter)
@@ -59,27 +54,108 @@ void _chassisTask(void *parameter)
 	}
 }
 
-void chassisForward(okapi::QLength inches, bool async)
+void chassisGenerateStraightPath(okapi::QLength inches, std::string pathName)
 {
-	if (async)
+	profileController->generatePath({{0_in, 0_in, 0_deg}, {inches, 0_in, 0_deg}}, pathName);
+}
+
+void chassisGeneratePath(okapi::QLength x, okapi::QLength y, okapi::QAngle degrees, std::string pathName, bool async, bool mirrored)
+{
+
+	profileController->generatePath({{0_in, 0_in, 0_deg}, {x, y, degrees}}, pathName);
+}
+
+void chassisGenerateSlowStraightPath(okapi::QLength inches, std::string pathName, bool async, double maxVel)
+{
+	profileController->generatePath({{0_in, 0_in, 0_deg}, {inches, 0_in, 0_deg}}, pathName, {maxVel, MAX_ACC, MAX_JERK});
+}
+
+void chassisExecutePath(std::string pathName, bool async, bool backwards)
+{
+	profileController->removePath(lastPath);
+	lastPath = pathName;
+	profileController->setTarget(pathName, backwards);
+	if (!async)
 	{
-		chassisAuto->moveDistanceAsync(inches);
-	}
-	else
-	{
-		chassisAuto->moveDistance(inches);
+		profileController->waitUntilSettled();
 	}
 }
 
-void chassisBackward(okapi::QLength inches, bool async)
+void chassisForward(okapi::QLength inches, std::string pathName, bool async)
 {
-	if (async)
+	profileController->removePath(lastPath);
+	profileController->generatePath({{0_in, 0_in, 0_deg}, {inches, 0_in, 0_deg}}, pathName);
+	lastPath = pathName;
+	profileController->setTarget(pathName);
+	if (!async)
 	{
-		chassisAuto->moveDistanceAsync(-inches);
+		profileController->waitUntilSettled();
 	}
-	else
+}
+
+void chassisForwardSlow(okapi::QLength inches, std::string pathName, bool async, double maxVel)
+{
+	profileController->removePath(lastPath);
+	profileController->generatePath({{0_in, 0_in, 0_deg}, {inches, 0_in, 0_deg}}, pathName, {maxVel, MAX_ACC, MAX_JERK});
+	lastPath = pathName;
+	profileController->setTarget(pathName);
+	if (!async)
 	{
-		chassisAuto->moveDistance(-inches);
+		profileController->waitUntilSettled();
+	}
+}
+
+void chassisBackward(okapi::QLength inches, std::string pathName, bool async)
+{
+	profileController->removePath(lastPath);
+	profileController->generatePath({{0_in, 0_in, 0_deg}, {inches, 0_in, 0_deg}}, pathName);
+	lastPath = pathName;
+	profileController->setTarget(pathName, true);
+	if (!async)
+	{
+		profileController->waitUntilSettled();
+	}
+}
+
+void chassisBackwardSlow(okapi::QLength inches, std::string pathName, bool async, double maxVel)
+{
+	profileController->removePath(lastPath);
+	profileController->generatePath({{0_in, 0_in, 0_deg}, {inches, 0_in, 0_deg}}, pathName, {maxVel, MAX_ACC, MAX_JERK});
+	lastPath = pathName;
+	profileController->setTarget(pathName, true);
+	if (!async)
+	{
+		profileController->waitUntilSettled();
+	}
+}
+
+void chassisTurn(okapi::QLength degrees, std::string pathName, bool async, bool right)
+{
+	// okapi::QLength inches = PI * 10 / (360 * static_cast<double> * inch);
+	turnProfileController->removePath(lastTurnPath);
+	turnProfileController->generatePath({{0_in, 0_in, 0_deg}, {2 * degrees, 0_in, 0_deg}}, pathName);
+	lastTurnPath = pathName;
+	turnProfileController->setTarget(pathName, right);
+	if (!async)
+	{
+		turnProfileController->waitUntilSettled();
+	}
+}
+
+void chassisWaitUntilSettled()
+{
+	profileController->waitUntilSettled();
+}
+
+void chassisMove(okapi::QLength x, okapi::QLength y, okapi::QAngle degrees, std::string pathName, bool async, bool mirrored)
+{
+	profileController->removePath(lastPath);
+	profileController->generatePath({{0_in, 0_in, 0_deg}, {x, y, degrees}}, pathName);
+	lastPath = pathName;
+	profileController->setTarget(pathName, true);
+	if (!async)
+	{
+		profileController->waitUntilSettled();
 	}
 }
 

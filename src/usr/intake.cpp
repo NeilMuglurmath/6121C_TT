@@ -12,6 +12,11 @@ void intakeOff()
 	intake.setBrakeMode(AbstractMotor::brakeMode::hold);
 }
 
+void intakeInAuto()
+{
+	intake.moveVelocity(150);
+}
+
 void intakeOutSlow()
 {
 	intake.moveVoltage(-9000);

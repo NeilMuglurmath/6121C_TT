@@ -11,13 +11,16 @@
 #include "okapi/api/device/rotarysensor/continuousRotarySensor.hpp"
 #include <memory>
 
-namespace okapi {
-class AbstractMotor : public ControllerOutput<double> {
-  public:
+namespace okapi
+{
+class AbstractMotor : public ControllerOutput<double>
+{
+public:
   /**
    * Indicates the 'brake mode' of a motor.
    */
-  enum class brakeMode {
+  enum class brakeMode
+  {
     coast = 0, ///< Motor coasts when stopped, traditional behavior
     brake = 1, ///< Motor brakes when stopped
     hold = 2,  ///< Motor actively holds position when stopped
@@ -27,7 +30,8 @@ class AbstractMotor : public ControllerOutput<double> {
   /**
    * Indicates the units used by the motor encoders.
    */
-  enum class encoderUnits {
+  enum class encoderUnits
+  {
     degrees = 0,        ///< degrees
     rotations = 1,      ///< rotations
     counts = 2,         ///< counts
@@ -37,7 +41,8 @@ class AbstractMotor : public ControllerOutput<double> {
   /**
    * Indicates the internal gear ratio of a motor.
    */
-  enum class gearset {
+  enum class gearset
+  {
     red = 100,   ///< 36:1, 100 RPM, Red gear set
     green = 200, ///< 18:1, 200 RPM, Green gear set
     blue = 600,  ///< 6:1,  600 RPM, Blue gear set
@@ -47,7 +52,8 @@ class AbstractMotor : public ControllerOutput<double> {
   /**
    * A simple structure representing the full ratio between motor and wheel.
    */
-  struct GearsetRatioPair {
+  struct GearsetRatioPair
+  {
     /**
      * A simple structure representing the full ratio between motor and wheel.
      *
@@ -58,7 +64,8 @@ class AbstractMotor : public ControllerOutput<double> {
      * @param iratio The ratio of motor rotation to wheel rotation.
      */
     GearsetRatioPair(const gearset igearset, const double iratio = 1)
-      : internalGearset(igearset), ratio(iratio) {
+        : internalGearset(igearset), ratio(iratio)
+    {
     }
 
     ~GearsetRatioPair() = default;

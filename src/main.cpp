@@ -8,9 +8,7 @@
  */
 void initialize()
 {
-	pros::lcd::initialize();
-	chassisInit();
-	intakeInit();
+	autonomousChooserInit();
 }
 
 /**
@@ -44,7 +42,7 @@ void competition_initialize() {}
  */
 void autonomous()
 {
-	testProfiling();
+	redRight8Cube();
 }
 
 /**
@@ -62,6 +60,8 @@ void autonomous()
  */
 void opcontrol()
 {
+	intakeInit();
+	chassisInit();
 	while (true)
 	{
 		anglerOpControl();

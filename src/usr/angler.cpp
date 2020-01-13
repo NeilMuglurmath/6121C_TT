@@ -29,13 +29,6 @@ void anglerOut()
 	motorAngler.moveVoltage(0);
 }
 
-void anglerExpand()
-{
-	motorAngler.moveAbsolute(1000, 100);
-	pros::delay(1000);
-	motorAngler.moveAbsolute(0, 100);
-}
-
 void anglerIn()
 {
 	while (motorAngler.getPosition() < ANGLER_LOWER_TO)

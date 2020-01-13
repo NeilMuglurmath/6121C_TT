@@ -2,6 +2,7 @@
 #define _INTAKE_HPP_
 
 void intakeIn();
+void intakeInAuto();
 void intakeOff();
 void intakeOutSlow();
 void intakeOpControl();

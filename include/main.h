@@ -46,6 +46,7 @@
 #include "usr/intake.hpp"
 #include "usr/lift.hpp"
 #include "usr/autonomousRoutines.hpp"
+#include "usr/autonomousChooser.hpp"
 //#include "pros/api_legacy.h"
 
 /**

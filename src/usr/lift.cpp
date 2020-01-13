@@ -7,8 +7,16 @@ const int LIFT_UPPER_LIMIT = 1622;
 
 void liftHoldDown()
 {
-	motorLift.moveVelocity(0);
-	motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+	if (motorLift.getPosition() < 100)
+	{
+		motorLift.moveVelocity(-1);
+		motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+	}
+	else
+	{
+		motorLift.moveVelocity(0);
+		motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+	}
 }
 
 void liftMove(double degrees)
@@ -62,9 +70,7 @@ void liftPrintInfo()
 
 void expand()
 {
-	motorLift.moveAbsolute(LIFT_UPPER_LIMIT, 200);
-	pros::delay(900);
-	motorLift.moveAbsolute(LIFT_LOWER_LIMIT, 200);
-	pros::delay(700);
-	anglerExpand();
+	motorLift.moveAbsolute(600, 200);
+	pros::delay(800);
+	motorLift.moveAbsolute(0, 200);
 }

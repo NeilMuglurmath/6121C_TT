@@ -4,6 +4,5 @@
 void anglerOpControl();
 void anglerOut();
 void anglerIn();
-void anglerExpand();
 
 #endif
