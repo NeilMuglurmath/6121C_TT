@@ -17,9 +17,9 @@ void intakeInAuto()
 	intake.moveVelocity(150);
 }
 
-void intakeOutSlow()
+void intakePower(int voltage)
 {
-	intake.moveVoltage(-9000);
+	intake.moveVoltage(voltage);
 }
 
 void intakeOpControl()
@@ -30,7 +30,7 @@ void intakeOpControl()
 	}
 	else if (master.getDigital(ControllerDigital::L2))
 	{
-		intakeOutSlow();
+		intakePower(-12000);
 	}
 
 	else

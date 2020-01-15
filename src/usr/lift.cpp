@@ -9,7 +9,7 @@ void liftHoldDown()
 {
 	if (motorLift.getPosition() < 100)
 	{
-		motorLift.moveVelocity(-1);
+		motorLift.moveVelocity(-0.4);
 		motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
 	}
 	else

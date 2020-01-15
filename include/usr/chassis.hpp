@@ -14,5 +14,6 @@ void chassisBackwardSlow(okapi::QLength inches, std::string pathName, bool async
 void chassisMove(okapi::QLength x, okapi::QLength y, okapi::QAngle degrees, std::string pathName, bool async, bool mirrored);
 void chassisTurn(okapi::QLength degrees, std::string pathName, bool async, bool right);
 void chassisWaitUntilSettled();
+void turnWaitUntilSettled();
 
 #endif

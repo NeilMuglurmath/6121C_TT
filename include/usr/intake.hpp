@@ -4,7 +4,7 @@
 void intakeIn();
 void intakeInAuto();
 void intakeOff();
-void intakeOutSlow();
+void intakePower(int voltage);
 void intakeOpControl();
 void intakeInit();
 

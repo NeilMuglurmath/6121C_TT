@@ -147,6 +147,11 @@ void chassisWaitUntilSettled()
 	profileController->waitUntilSettled();
 }
 
+void turnWaitUntilSettled()
+{
+	turnProfileController->waitUntilSettled();
+}
+
 void chassisMove(okapi::QLength x, okapi::QLength y, okapi::QAngle degrees, std::string pathName, bool async, bool mirrored)
 {
 	profileController->removePath(lastPath);

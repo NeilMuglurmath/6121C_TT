@@ -8,7 +8,7 @@ const int ANGLER_LOWER_TO = -130;
 
 void anglerOut()
 {
-	liftMove(120);
+	liftMove(60);
 	int counter = 0;
 
 	while (motorAngler.getPosition() > ANGLER_HALFWAY)
@@ -31,13 +31,13 @@ void anglerOut()
 
 void anglerIn()
 {
+	liftMove(-60);
 	while (motorAngler.getPosition() < ANGLER_LOWER_TO)
 	{
 		motorAngler.moveVoltage(12000);
 		pros::delay(20);
 	}
 	motorAngler.moveVoltage(0);
-	liftMove(-120);
 }
 
 void anglerOpControl()
