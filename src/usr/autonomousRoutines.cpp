@@ -21,20 +21,21 @@ void redRight8Cube()
     chassisGenerateStraightPath(30_in, "go to stack");
     chassisWaitUntilSettled();
     chassisExecutePath("go to stack", true, true);
-    chassisGenerateTurnPath(4.5_in, "turn to stack");
+    chassisGenerateTurnPath(4.9_in, "turn to stack");
     chassisWaitUntilSettled();
     chassisExecuteTurnPath("turn to stack", true, false);
-    intakePower(-2000);
-    chassisGenerateStraightPath(15_in, "deploy stack");
-    pros::delay(500);
+    intakePower(-4300);
+    chassisGenerateSlowStraightPath(16_in, "deploy stack", 0.9);
+    pros::delay(300);
     intakeOff();
     chassisTurnWaitUntilSettled();
     chassisExecutePath("deploy stack", true, false);
+    intakePower(-400);
     anglerOut();
-    chassisGenerateSlowStraightPath(20_in, "back from stack", 0.3);
+    chassisGenerateSlowStraightPath(20_in, "back from stack", 0.25);
     chassisWaitUntilSettled();
-    chassisExecutePath("back from stack", true, true);
     intakePower(-7000);
+    chassisExecutePath("back from stack", true, true);
     anglerIn();
     chassisWaitUntilSettled();
 }
