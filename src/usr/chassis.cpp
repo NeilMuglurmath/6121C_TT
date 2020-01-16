@@ -59,15 +59,42 @@ void chassisGenerateStraightPath(okapi::QLength inches, std::string pathName)
 	profileController->generatePath({{0_in, 0_in, 0_deg}, {inches, 0_in, 0_deg}}, pathName);
 }
 
-void chassisGeneratePath(okapi::QLength x, okapi::QLength y, okapi::QAngle degrees, std::string pathName, bool async, bool mirrored)
+void chassisGeneratePath(okapi::QLength x, okapi::QLength y, okapi::QAngle degrees, std::string pathName)
 {
 
 	profileController->generatePath({{0_in, 0_in, 0_deg}, {x, y, degrees}}, pathName);
 }
 
-void chassisGenerateSlowStraightPath(okapi::QLength inches, std::string pathName, bool async, double maxVel)
+void chassisGenerateSlowPath(okapi::QLength x, okapi::QLength y, okapi::QAngle degrees, std::string pathName, double maxVel)
+{
+	profileController->generatePath({{0_in, 0_in, 0_deg}, {x, y, degrees}}, pathName, {maxVel, MAX_ACC, MAX_JERK});
+}
+
+void chassisGenerateSlowStraightPath(okapi::QLength inches, std::string pathName, double maxVel)
 {
 	profileController->generatePath({{0_in, 0_in, 0_deg}, {inches, 0_in, 0_deg}}, pathName, {maxVel, MAX_ACC, MAX_JERK});
+}
+
+void chassisGenerateTurnPath(okapi::QLength inches, std::string pathName)
+{
+	// okapi::QLength inches = static_cast<double>(PI * 10 / (360 * degrees)) * inch;
+	turnProfileController->generatePath({{0_in, 0_in, 0_deg}, {2 * inches, 0_in, 0_deg}}, pathName);
+}
+
+void chassisExecuteTurnPath(std::string pathName, bool async, bool backwards)
+{
+	turnProfileController->removePath(lastTurnPath);
+	lastTurnPath = pathName;
+	turnProfileController->setTarget(pathName, backwards);
+	if (!async)
+	{
+		turnProfileController->waitUntilSettled();
+	}
+}
+
+void chassisTurnWaitUntilSettled()
+{
+	turnProfileController->waitUntilSettled();
 }
 
 void chassisExecutePath(std::string pathName, bool async, bool backwards)
@@ -129,11 +156,11 @@ void chassisBackwardSlow(okapi::QLength inches, std::string pathName, bool async
 	}
 }
 
-void chassisTurn(okapi::QLength degrees, std::string pathName, bool async, bool right)
+void chassisTurn(okapi::QLength inches, std::string pathName, bool async, bool right)
 {
-	// okapi::QLength inches = PI * 10 / (360 * static_cast<double> * inch);
+	// okapi::QLength inches = static_cast<double>(PI * 10 / (360 * degrees)) * inch;
 	turnProfileController->removePath(lastTurnPath);
-	turnProfileController->generatePath({{0_in, 0_in, 0_deg}, {2 * degrees, 0_in, 0_deg}}, pathName);
+	turnProfileController->generatePath({{0_in, 0_in, 0_deg}, {2 * inches, 0_in, 0_deg}}, pathName);
 	lastTurnPath = pathName;
 	turnProfileController->setTarget(pathName, right);
 	if (!async)
