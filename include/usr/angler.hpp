@@ -3,6 +3,7 @@
 
 void anglerOpControl();
 void anglerOut();
+void anglerOutHalfway();
 void anglerIn();
 
 #endif

@@ -18,6 +18,5 @@ void chassisExecuteTurnPath(std::string pathName, bool async, bool backwards);
 void chassisTurn(okapi::QLength inches, std::string pathName, bool async, bool right);
 void chassisWaitUntilSettled();
 void chassisTurnWaitUntilSettled();
-void turnWaitUntilSettled();
 
 #endif

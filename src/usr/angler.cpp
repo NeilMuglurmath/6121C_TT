@@ -2,7 +2,7 @@
 
 Motor motorAngler(PORT_ANGLER, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees);
 
-const int ANGLER_OUT = -1645;
+const int ANGLER_OUT = -1550; //-1645
 const int ANGLER_HALFWAY = -1000;
 const int ANGLER_LOWER_TO = -130;
 
@@ -28,6 +28,11 @@ void anglerOut()
 		pros::delay(20);
 	}
 	motorAngler.moveVoltage(0);
+}
+
+void anglerOutHalfway()
+{
+	motorAngler.moveAbsolute(ANGLER_HALFWAY, 60);
 }
 
 void anglerIn()
