@@ -16,6 +16,9 @@ std::string lastTurnPath("");
 QLength WHEELBASE_WIDTH = 10_in;
 QLength WHEEL_DIAM = 1.77_in;
 
+MotorGroup chassisLeft({PORT_LEFT_BACK, PORT_LEFT_FRONT});
+MotorGroup chassisRight({PORT_RIGHT_BACK, PORT_RIGHT_FRONT});
+
 auto chassis = ChassisControllerBuilder()
 				   .withMotors({PORT_LEFT_BACK, PORT_LEFT_FRONT}, {PORT_RIGHT_BACK, PORT_RIGHT_FRONT})
 				   .withDimensions(AbstractMotor::gearset::blue, {{1.77_in, 10_in}, imev5BlueTPR})
@@ -52,6 +55,12 @@ void _chassisTask(void *parameter)
 		_chassisArcade();
 		pros::delay(20);
 	}
+}
+
+void chassisForwardVoltage(int voltage)
+{
+	chassisLeft.moveVoltage(12000);
+	chassisRight.moveVoltage(-12000);
 }
 
 void chassisGenerateStraightPath(okapi::QLength inches, std::string pathName)

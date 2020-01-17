@@ -3,5 +3,6 @@
 
 void testProfiling();
 void redRight8Cube();
+void redLeft();
 
 #endif
