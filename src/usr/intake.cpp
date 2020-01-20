@@ -30,7 +30,7 @@ void intakeOpControl()
 	}
 	else if (master.getDigital(ControllerDigital::L2))
 	{
-		intakePower(-12000);
+		intakePower(-6000);
 	}
 
 	else

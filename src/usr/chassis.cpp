@@ -42,6 +42,7 @@ auto turnProfileController = AsyncMotionProfileControllerBuilder()
 void _chassisArcade()
 {
 	chassis->getModel()->arcade(master.getAnalog(ControllerAnalog::rightX), master.getAnalog(ControllerAnalog::leftY));
+	// chassisAuto->getModel()->tank(master.getAnalog(ControllerAnalog::leftY), master.getAnalog(ControllerAnalog::rightY));
 }
 
 void _printChassisInfo()

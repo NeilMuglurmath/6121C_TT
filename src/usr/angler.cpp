@@ -2,7 +2,7 @@
 
 Motor motorAngler(PORT_ANGLER, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees);
 
-const int ANGLER_OUT = -1550; //-1645
+const int ANGLER_OUT = -1450;
 const int ANGLER_HALFWAY = -1000;
 const int ANGLER_LOWER_TO = -130;
 
@@ -62,5 +62,5 @@ void anglerOpControl()
 
 		motorAngler.moveVoltage(0);
 	}
-	printf("%.1f %.1f\n", motorAngler.getPower(), motorAngler.getPosition());
+	// printf("%.1f %.1f\n", motorAngler.getPower(), motorAngler.getPosition());
 }

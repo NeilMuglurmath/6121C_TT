@@ -1,22 +1,50 @@
 #include "main.h"
 
-Motor motorLift(PORT_LIFT, false, AbstractMotor::gearset::blue, AbstractMotor::encoderUnits::degrees);
+Motor motorLift(PORT_LIFT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 
 const int LIFT_LOWER_LIMIT = 0;
-const int LIFT_UPPER_LIMIT = 1622;
+const int LIFT_SMALL_TOWER = 1000;
+const int LIFT_SMALL_TOWER_DESCORE = 900;
+const int LIFT_UPPER_LIMIT = 1270;
+
+const double LIFT_KP = 0.0015;
+const double LIFT_KI = 0;
+const double LIFT_KD = 0;
+
+auto liftController = AsyncPosControllerBuilder()
+						  .withMotor(PORT_LIFT)
+						  .withGains({LIFT_KP, LIFT_KI, LIFT_KD})
+						  .build();
 
 void liftHoldDown()
 {
-	if (motorLift.getPosition() < 100)
+
+	motorLift.moveVelocity(0);
+	motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+}
+
+void liftDown()
+{
+
+	if (liftController->getTarget() != LIFT_LOWER_LIMIT)
 	{
-		motorLift.moveVelocity(-0.4);
-		motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+		while (motorLift.getPosition() > 100)
+		{
+			liftController->controllerSet(-1);
+		}
+
+		liftController->setTarget(0);
 	}
-	else
-	{
-		motorLift.moveVelocity(0);
-		motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
-	}
+}
+
+void liftSmallTower()
+{
+	liftController->setTarget(LIFT_SMALL_TOWER);
+}
+
+void liftHighTower()
+{
+	liftController->setTarget(LIFT_UPPER_LIMIT);
 }
 
 void liftMove(double degrees)
@@ -42,24 +70,21 @@ bool _liftAboveBottom()
 
 void liftOpControl()
 {
-	if (master.getDigital(ControllerDigital::up) && _liftBelowTop())
-
+	if (master.getDigital(ControllerDigital::up))
 	{
-		liftPower(12000);
+		liftHighTower();
 	}
-	else if (master.getDigital(ControllerDigital::down) && _liftAboveBottom())
+	else if (master.getDigital(ControllerDigital::down))
 	{
-		liftPower(-12000);
+		liftDown();
 	}
-	else if (master.getDigital(ControllerDigital::A))
+	else if (master.getDigital(ControllerDigital::right))
 	{
-		expand();
+		liftSmallTower();
 	}
-
-	else
+	else if (master.getDigital(ControllerDigital::left))
 	{
-		liftHoldDown();
-		// motorLift.moveVoltage(0);
+		liftController->setTarget(LIFT_SMALL_TOWER_DESCORE);
 	}
 }
 
