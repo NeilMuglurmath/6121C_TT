@@ -4,6 +4,7 @@
 void liftHoldDown();
 void liftMove(double degrees);
 void liftPower(int voltage);
+double liftGetPosition();
 void liftOpControl();
 void liftPrintInfo();
 void expand();

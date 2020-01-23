@@ -30,7 +30,14 @@ void intakeOpControl()
 	}
 	else if (master.getDigital(ControllerDigital::L2))
 	{
-		intakePower(-6000);
+		if (liftGetPosition() < 1100)
+		{
+			intakePower(-6000);
+		}
+		else
+		{
+			intakePower(-10000);
+		}
 	}
 
 	else

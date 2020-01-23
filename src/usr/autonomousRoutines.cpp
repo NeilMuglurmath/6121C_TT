@@ -9,19 +9,20 @@ void testProfiling()
 
 void redRight8Cube()
 {
+    expand();
     intakeIn();
     liftHoldDown();
-    chassisForwardSlow(45_in, "gather 4 cubes", true, 0.55);
-    chassisGeneratePath(45_in, -23_in, 0_deg, "go to second row");
+    chassisForwardSlow(30_in, "gather 4 cubes", true, 0.8);
+    chassisGeneratePath(31_in, -25_in, 0_deg, "go to second row");
     chassisWaitUntilSettled();
     chassisExecutePath("go to second row", true, true);
-    chassisGenerateSlowStraightPath(46_in, "gather 4 more cubes", 0.6);
+    chassisGenerateSlowStraightPath(47_in, "gather 4 more cubes", 0.6);
     chassisWaitUntilSettled();
     chassisExecutePath("gather 4 more cubes", true, false);
     chassisGenerateStraightPath(33_in, "go to stack");
     chassisWaitUntilSettled();
     chassisExecutePath("go to stack", true, true);
-    chassisGenerateTurnPath(4.9_in, "turn to stack");
+    chassisGenerateTurnPath(7.4_in, "turn to stack");
     chassisWaitUntilSettled();
     chassisExecuteTurnPath("turn to stack", true, false);
     intakePower(-4300);
@@ -32,11 +33,13 @@ void redRight8Cube()
     chassisExecutePath("deploy stack", true, false);
     intakePower(-400);
     anglerOut();
+    pros::delay(200);
     chassisGenerateSlowStraightPath(20_in, "back from stack", 0.25);
     chassisWaitUntilSettled();
+    anglerIn();
+    pros::delay(200);
     intakePower(-7000);
     chassisExecutePath("back from stack", true, true);
-    anglerIn();
     chassisWaitUntilSettled();
 }
 

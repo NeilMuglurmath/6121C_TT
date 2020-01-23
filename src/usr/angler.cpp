@@ -24,7 +24,7 @@ void anglerOut()
 	}
 	while (motorAngler.getPosition() > ANGLER_OUT)
 	{
-		motorAngler.moveVoltage(-9700);
+		motorAngler.moveVoltage(-12000);
 		pros::delay(20);
 	}
 	motorAngler.moveVoltage(0);

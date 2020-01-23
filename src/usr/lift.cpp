@@ -6,6 +6,7 @@ const int LIFT_LOWER_LIMIT = 0;
 const int LIFT_SMALL_TOWER = 1000;
 const int LIFT_SMALL_TOWER_DESCORE = 900;
 const int LIFT_UPPER_LIMIT = 1270;
+const int FIRST_CUBE = 90;
 
 const double LIFT_KP = 0.0015;
 const double LIFT_KI = 0;
@@ -23,12 +24,17 @@ void liftHoldDown()
 	motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
 }
 
+double liftGetPosition()
+{
+	return motorLift.getPosition();
+}
+
 void liftDown()
 {
 
 	if (liftController->getTarget() != LIFT_LOWER_LIMIT)
 	{
-		while (motorLift.getPosition() > 100)
+		while (motorLift.getPosition() > 20)
 		{
 			liftController->controllerSet(-1);
 		}
@@ -86,6 +92,14 @@ void liftOpControl()
 	{
 		liftController->setTarget(LIFT_SMALL_TOWER_DESCORE);
 	}
+	else if (master.getDigital(ControllerDigital::A))
+	{
+		expand();
+	}
+	else if (master.getDigital(ControllerDigital::X))
+	{
+		liftController->setTarget(FIRST_CUBE);
+	}
 }
 
 void liftPrintInfo()
@@ -95,7 +109,8 @@ void liftPrintInfo()
 
 void expand()
 {
-	motorLift.moveAbsolute(600, 200);
-	pros::delay(800);
-	motorLift.moveAbsolute(0, 200);
+	liftHighTower();
+	intakePower(-12000);
+	pros::delay(1000);
+	liftDown();
 }
