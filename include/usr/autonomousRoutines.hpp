@@ -2,7 +2,6 @@
 #define _AUTONOMOUS_ROUTINES_HPP_
 
 void testProfiling();
-void redRight8Cube();
-void redLeft();
-
+void right(bool blue);
+void left(bool blue);
 #endif

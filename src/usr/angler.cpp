@@ -22,8 +22,14 @@ void anglerOut()
 		counter += 20;
 		pros::delay(20);
 	}
+	counter = 0;
 	while (motorAngler.getPosition() > ANGLER_OUT)
 	{
+		if (counter > 2000)
+		{
+			break;
+		}
+		counter += 20;
 		motorAngler.moveVoltage(-12000);
 		pros::delay(20);
 	}

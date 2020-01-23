@@ -58,10 +58,10 @@ void _chassisTask(void *parameter)
 	}
 }
 
-void chassisForwardVoltage(int voltage)
+void chassisMoveVoltage(int voltage)
 {
-	chassisLeft.moveVoltage(12000);
-	chassisRight.moveVoltage(-12000);
+	chassisLeft.moveVoltage(voltage);
+	chassisRight.moveVoltage(-voltage);
 }
 
 void chassisGenerateStraightPath(okapi::QLength inches, std::string pathName)
@@ -91,11 +91,11 @@ void chassisGenerateTurnPath(okapi::QLength inches, std::string pathName)
 	turnProfileController->generatePath({{0_in, 0_in, 0_deg}, {2 * inches, 0_in, 0_deg}}, pathName);
 }
 
-void chassisExecuteTurnPath(std::string pathName, bool async, bool backwards)
+void chassisExecuteTurnPath(std::string pathName, bool async, bool backwards, bool mirrored)
 {
 	turnProfileController->removePath(lastTurnPath);
 	lastTurnPath = pathName;
-	turnProfileController->setTarget(pathName, backwards);
+	turnProfileController->setTarget(pathName, backwards, mirrored);
 	if (!async)
 	{
 		turnProfileController->waitUntilSettled();
@@ -107,11 +107,11 @@ void chassisTurnWaitUntilSettled()
 	turnProfileController->waitUntilSettled();
 }
 
-void chassisExecutePath(std::string pathName, bool async, bool backwards)
+void chassisExecutePath(std::string pathName, bool async, bool backwards, bool mirrored)
 {
 	profileController->removePath(lastPath);
 	lastPath = pathName;
-	profileController->setTarget(pathName, backwards);
+	profileController->setTarget(pathName, backwards, mirrored);
 	if (!async)
 	{
 		profileController->waitUntilSettled();
