@@ -110,7 +110,7 @@ void liftPrintInfo()
 void expand()
 {
 	liftHighTower();
-	intakePower(-2000);
+	intakePower(-4000);
 	// chassisMoveVoltage(-3000);
 	pros::delay(1300);
 	liftDown();
