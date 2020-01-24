@@ -81,35 +81,73 @@ void unprotected(bool blue)
 
 void protectedSide(bool blue)
 {
-    chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
-    expand();
-    intakeIn();
-    chassisExecutePath("get second cube", true, false, blue);
-    chassisGenerateTurnPath(3.75_in, "turn to third cube");
-    chassisWaitUntilSettled();
-    chassisExecuteTurnPath("turn to third cube", true, blue, blue);
-    chassisGenerateSlowStraightPath(32_in, "get third and fourth cubes", 1);
-    chassisTurnWaitUntilSettled();
-    chassisExecutePath("get third and fourth cubes", true, false, false);
-    chassisGenerateStraightPath(15_in, "back from tower");
-    chassisWaitUntilSettled();
-    chassisExecutePath("back from tower", true, true, false);
-    chassisGenerateTurnPath(9.1_in, "turn to stack");
-    chassisWaitUntilSettled();
-    chassisExecuteTurnPath("turn to stack", true, !blue, blue);
-    chassisGenerateStraightPath(22_in, "go to stack");
-    chassisTurnWaitUntilSettled();
-    chassisExecutePath("go to stack", true, false, false);
-    intakePower(-4500);
-    pros::delay(300);
-    intakeOff();
-    chassisGenerateSlowStraightPath(12_in, "back away from zone", 0.7);
-    chassisWaitUntilSettled();
-    intakePower(-2000);
-    anglerOut();
-    pros::delay(200);
-    intakePower(-9000);
-    chassisExecutePath("back away from zone", true, true, false);
-    anglerIn();
-    chassisWaitUntilSettled();
+    if (blue)
+    {
+        chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
+        expand();
+        intakeIn();
+        chassisExecutePath("get second cube", true, false, blue);
+        chassisGenerateTurnPath(3.75_in, "turn to third cube");
+        chassisWaitUntilSettled();
+        chassisExecuteTurnPath("turn to third cube", true, blue, blue);
+        chassisGenerateSlowStraightPath(32_in, "get third and fourth cubes", 1);
+        chassisTurnWaitUntilSettled();
+        chassisExecutePath("get third and fourth cubes", true, false, false);
+        chassisGenerateStraightPath(15_in, "back from tower");
+        chassisWaitUntilSettled();
+        chassisExecutePath("back from tower", true, true, false);
+        chassisGenerateTurnPath(9.1_in, "turn to stack");
+        chassisWaitUntilSettled();
+        chassisExecuteTurnPath("turn to stack", true, !blue, blue);
+        chassisGenerateStraightPath(22_in, "go to stack");
+        chassisTurnWaitUntilSettled();
+        chassisExecutePath("go to stack", true, false, false);
+        intakePower(-4500);
+        pros::delay(300);
+        intakeOff();
+        chassisGenerateSlowStraightPath(12_in, "back away from zone", 0.7);
+        chassisWaitUntilSettled();
+        intakePower(-2000);
+        anglerOut();
+        pros::delay(200);
+        intakePower(-9000);
+        chassisExecutePath("back away from zone", true, true, false);
+        anglerIn();
+        chassisWaitUntilSettled();
+    }
+    else
+    {
+        chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
+        expand();
+        intakeIn();
+        chassisExecutePath("get second cube", true, false, blue);
+        chassisGenerateTurnPath(3.2_in, "turn to third cube");
+        chassisWaitUntilSettled();
+        chassisExecuteTurnPath("turn to third cube", true, blue, blue);
+        chassisGenerateSlowStraightPath(32_in, "get third and fourth cubes", 1);
+        chassisTurnWaitUntilSettled();
+        chassisExecutePath("get third and fourth cubes", true, false, false);
+        chassisGenerateStraightPath(15_in, "back from tower");
+        chassisWaitUntilSettled();
+        chassisExecutePath("back from tower", true, true, false);
+        chassisGenerateTurnPath(9.6_in, "turn to stack");
+        chassisWaitUntilSettled();
+        chassisExecuteTurnPath("turn to stack", true, !blue, blue);
+        chassisGenerateStraightPath(24_in, "go to stack");
+        chassisTurnWaitUntilSettled();
+        chassisExecutePath("go to stack", true, false, false);
+        intakePower(-4500);
+        pros::delay(300);
+        intakeOff();
+        chassisGenerateStraightPath(19_in, "back away from zone");
+        chassisWaitUntilSettled();
+        intakePower(-2000);
+        anglerOut();
+        chassisGenerateSlowStraightPath(24_in, "back away from zone", 0.9);
+        pros::delay(200);
+        intakePower(-10000);
+        chassisExecutePath("back away from zone", true, true, false);
+        anglerIn();
+        chassisWaitUntilSettled();
+    }
 }
