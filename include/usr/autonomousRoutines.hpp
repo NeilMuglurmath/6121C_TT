@@ -2,6 +2,6 @@
 #define _AUTONOMOUS_ROUTINES_HPP_
 
 void testProfiling();
-void right(bool blue);
-void left(bool blue);
+void unprotected(bool blue);
+void protectedSide(bool blue);
 #endif
