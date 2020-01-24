@@ -96,7 +96,7 @@ void protectedSide(bool blue)
         chassisGenerateStraightPath(15_in, "back from tower");
         chassisWaitUntilSettled();
         chassisExecutePath("back from tower", true, true, false);
-        chassisGenerateTurnPath(9.1_in, "turn to stack");
+        chassisGenerateTurnPath(9.75_in, "turn to stack");
         chassisWaitUntilSettled();
         chassisExecuteTurnPath("turn to stack", true, !blue, blue);
         chassisGenerateStraightPath(22_in, "go to stack");
@@ -105,12 +105,12 @@ void protectedSide(bool blue)
         intakePower(-4500);
         pros::delay(300);
         intakeOff();
-        chassisGenerateSlowStraightPath(12_in, "back away from zone", 0.7);
         chassisWaitUntilSettled();
         intakePower(-2000);
         anglerOut();
+        chassisGenerateSlowStraightPath(24_in, "back away from zone", 0.9);
         pros::delay(200);
-        intakePower(-9000);
+        intakePower(-10000);
         chassisExecutePath("back away from zone", true, true, false);
         anglerIn();
         chassisWaitUntilSettled();
