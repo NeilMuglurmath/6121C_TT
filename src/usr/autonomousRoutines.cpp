@@ -108,8 +108,9 @@ void protectedSide(bool blue)
         chassisWaitUntilSettled();
         intakePower(-2000);
         anglerOut();
-        chassisGenerateSlowStraightPath(24_in, "back away from zone", 0.9);
         pros::delay(200);
+        chassisGenerateSlowStraightPath(24_in, "back away from zone", 0.9);
+
         intakePower(-10000);
         chassisExecutePath("back away from zone", true, true, false);
         anglerIn();
