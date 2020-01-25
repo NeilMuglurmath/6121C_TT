@@ -11,12 +11,11 @@ void unprotected(bool blue)
 {
     if (blue)
     {
-        chassisGenerateSlowStraightPath(28_in, "gather 4 cubes", 0.8);
+        chassisGenerateSlowStraightPath(23_in, "gather 4 cubes", 0.8);
         expand();
         intakeIn();
         chassisExecutePath("gather 4 cubes", true, false, blue);
-        // chassisGenerateSlowPath(27_in, -27_in, 0_deg, "go to second row", .9);
-        chassisGeneratePath(28_in, -25_in, 0_deg, "go to second row");
+        chassisGeneratePath(24_in, -25_in, 0_deg, "go to second row");
         chassisWaitUntilSettled();
         chassisExecutePath("go to second row", true, true, blue);
         chassisGenerateSlowStraightPath(49_in, "gather 4 more cubes", 0.6);
@@ -45,12 +44,11 @@ void unprotected(bool blue)
     }
     else
     {
-        chassisGenerateSlowStraightPath(28_in, "gather 4 cubes", 0.8);
+        chassisGenerateSlowStraightPath(23_in, "gather 4 cubes", 0.8);
         expand();
         intakeIn();
         chassisExecutePath("gather 4 cubes", true, false, blue);
-        // chassisGenerateSlowPath(27_in, -27_in, 0_deg, "go to second row", .9);
-        chassisGeneratePath(27_in, -33_in, 0_deg, "go to second row");
+        chassisGeneratePath(24_in, -30_in, 0_deg, "go to second row");
         chassisWaitUntilSettled();
         chassisExecutePath("go to second row", true, true, blue);
         chassisGenerateSlowStraightPath(49_in, "gather 4 more cubes", 0.6);
