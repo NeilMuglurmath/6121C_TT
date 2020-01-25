@@ -19,5 +19,6 @@ void chassisTurn(okapi::QLength inches, std::string pathName, bool async, bool r
 void chassisWaitUntilSettled();
 void chassisMoveVoltage(int voltage);
 void chassisTurnWaitUntilSettled();
+void deleteAutoChassis();
 
 #endif

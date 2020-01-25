@@ -7,10 +7,10 @@ Credit to VRC Team 315G for most of this code
 int autonNumber;
 bool redAlliance;
 
-static const char *btnm_map[] = {"test", "test", "test", "test", "\n",
+static const char *btnm_map[] = {"protected", "unprotected", "", "", "\n",
                                  "",
                                  "", "", "", ""};
-static const char *auton_strings[] = {"test", "test", "test", "test", "", "", "", ""};
+static const char *auton_strings[] = {"protected", "unprotected", "", "", "", "", "", ""};
 static const char *alliance_map[] = {"Red", "Blue", ""};
 
 static lv_res_t btnm_action(lv_obj_t *btnm, const char *txt)
@@ -89,9 +89,10 @@ void autonomousChooserExecuteAuto()
         switch (autonNumber)
         {
         case 1:
-            testProfiling();
+            protectedSide(false);
             break;
         case 2:
+            unprotected(false);
             break;
         case 3:
             break;
@@ -114,8 +115,10 @@ void autonomousChooserExecuteAuto()
         switch (autonNumber)
         {
         case 1:
+            protectedSide(true);
             break;
         case 2:
+            unprotected(true);
             break;
         case 3:
             break;

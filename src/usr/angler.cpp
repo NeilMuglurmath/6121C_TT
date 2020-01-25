@@ -18,6 +18,11 @@ void anglerOut()
 			break;
 		}
 
+		if (master.getDigital(ControllerDigital::R1))
+		{
+			break;
+		}
+
 		motorAngler.moveVoltage(-12000);
 		counter += 20;
 		pros::delay(20);
@@ -26,6 +31,10 @@ void anglerOut()
 	while (motorAngler.getPosition() > ANGLER_OUT)
 	{
 		if (counter > 2000)
+		{
+			break;
+		}
+		if (master.getDigital(ControllerDigital::R1))
 		{
 			break;
 		}
@@ -47,6 +56,10 @@ void anglerIn()
 	while (motorAngler.getPosition() < ANGLER_LOWER_TO)
 	{
 		motorAngler.moveVoltage(12000);
+		if (master.getDigital(ControllerDigital::R2))
+		{
+			break;
+		}
 
 		pros::delay(20);
 	}

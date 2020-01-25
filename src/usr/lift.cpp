@@ -37,6 +37,10 @@ void liftDown()
 		while (motorLift.getPosition() > 20)
 		{
 			liftController->controllerSet(-1);
+			if (master.getDigital(ControllerDigital::up))
+			{
+				break;
+			}
 		}
 
 		liftController->setTarget(0);

@@ -49,6 +49,13 @@ void _printChassisInfo()
 {
 }
 
+void deleteAutoChassis()
+{
+	chassisAuto->~ChassisController();
+	profileController->~AsyncMotionProfileController();
+	turnProfileController->~AsyncMotionProfileController();
+}
+
 void _chassisTask(void *parameter)
 {
 	while (true)
@@ -203,6 +210,7 @@ void chassisMove(okapi::QLength x, okapi::QLength y, okapi::QAngle degrees, std:
 
 void chassisInit()
 {
+	deleteAutoChassis();
 	std::string text("Chassis");
 	pros::Task my_task(_chassisTask, &text, "");
 }

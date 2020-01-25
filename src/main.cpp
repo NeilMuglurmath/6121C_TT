@@ -42,7 +42,7 @@ void competition_initialize() {}
  */
 void autonomous()
 {
-	protectedSide(true);
+	autonomousChooserExecuteAuto();
 }
 
 /**
