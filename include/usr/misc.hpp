@@ -11,10 +11,13 @@
 #define PORT_RIGHT_BACK -5
 #define PORT_RIGHT_FRONT -7
 
-#define PORT_LIFT 1
+#define PORT_LIFT 11
 
 #define PORT_INTAKE_LEFT 9
 
 #define PORT_INTAKE_RIGHT -2
+
+#define PORT_LEFT_LINE_TRACKER 'g'
+#define PORT_RIGHT_LINE_TRACKER 'h'
 
 #endif

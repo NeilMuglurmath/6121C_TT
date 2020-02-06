@@ -8,8 +8,16 @@ void intakeIn()
 }
 void intakeOff()
 {
-	intake.moveVelocity(0);
-	intake.setBrakeMode(AbstractMotor::brakeMode::hold);
+	if (isAnglerGoingOut())
+	{
+		intake.moveVoltage(0);
+		intake.setBrakeMode(AbstractMotor::brakeMode::coast);
+	}
+	else
+	{
+		intake.moveVelocity(0);
+		intake.setBrakeMode(AbstractMotor::brakeMode::hold);
+	}
 }
 
 void intakeInAuto()

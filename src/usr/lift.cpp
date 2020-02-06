@@ -5,46 +5,27 @@ Motor motorLift(PORT_LIFT, false, AbstractMotor::gearset::green, AbstractMotor::
 const int LIFT_LOWER_LIMIT = 0;
 const int LIFT_SMALL_TOWER = 1000;
 const int LIFT_SMALL_TOWER_DESCORE = 900;
-const int LIFT_UPPER_LIMIT = 1270;
+const int LIFT_UPPER_LIMIT = 1450;
 const int FIRST_CUBE = 90;
 
-const double LIFT_KP = 0.0015;
-const double LIFT_KI = 0;
-const double LIFT_KD = 0;
+const double LIFT_KP = 0.0001;
+const double LIFT_KI = 0.004;
+const double LIFT_KD = 0.000001;
 
 auto liftController = AsyncPosControllerBuilder()
 						  .withMotor(PORT_LIFT)
 						  .withGains({LIFT_KP, LIFT_KI, LIFT_KD})
 						  .build();
 
-void liftHoldDown()
-{
-
-	motorLift.moveVelocity(0);
-	motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
-}
-
-double liftGetPosition()
+double
+liftGetPosition()
 {
 	return motorLift.getPosition();
 }
 
 void liftDown()
 {
-
-	if (liftController->getTarget() != LIFT_LOWER_LIMIT)
-	{
-		while (motorLift.getPosition() > 20)
-		{
-			liftController->controllerSet(-1);
-			if (master.getDigital(ControllerDigital::up))
-			{
-				break;
-			}
-		}
-
-		liftController->setTarget(0);
-	}
+	liftController->setTarget(0);
 }
 
 void liftSmallTower()
@@ -104,11 +85,12 @@ void liftOpControl()
 	{
 		liftController->setTarget(FIRST_CUBE);
 	}
+	liftPrintInfo();
 }
 
 void liftPrintInfo()
 {
-	printf("Pos: %.1f Target Pos: %.1f, Efficiency: %.1f\n", motorLift.getPosition(), motorLift.getTargetPosition(), motorLift.getEfficiency());
+	printf("Pos: %.1f Target Pos: %.1f, Error: %.1f\n", motorLift.getPosition(), liftController->getTarget(), liftController->getError());
 }
 
 void expand()
