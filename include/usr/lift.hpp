@@ -2,10 +2,9 @@
 #define _LIFT_HPP_
 
 void liftMove(double degrees);
-void liftPower(int voltage);
 double liftGetPosition();
-void liftOpControl();
-void liftPrintInfo();
+void liftTaskInit();
+void liftSmoothControlTaskInit();
 void expand();
 
 #endif

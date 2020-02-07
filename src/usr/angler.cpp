@@ -70,11 +70,6 @@ void anglerOut()
 	motorAngler.moveVoltage(0);
 }
 
-void anglerOutHalfway()
-{
-	motorAngler.moveAbsolute(ANGLER_HALFWAY, 60);
-}
-
 void anglerIn()
 {
 
@@ -107,5 +102,9 @@ void anglerOpControl()
 
 		motorAngler.moveVoltage(0);
 	}
-	// printf("%.1f %.1f %d %d %d\n", motorAngler.getPower(), motorAngler.getPosition(), leftLineTracker.get_value(), rightLineTracker.get_value(), cubeIsInRollers());
+}
+
+void _anglerPrintInfo()
+{
+	printf("Power Drawn: %.1f Position: %.1f Left Tracker: %d Right Tracker: %d Cube In Rollers: %d\n", motorAngler.getPower(), motorAngler.getPosition(), leftLineTracker.get_value(), rightLineTracker.get_value(), cubeIsInRollers());
 }

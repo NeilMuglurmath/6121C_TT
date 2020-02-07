@@ -9,6 +9,7 @@
 void initialize()
 {
 	autonomousChooserInit();
+	liftSmoothControlTaskInit();
 }
 
 /**
@@ -61,12 +62,12 @@ void autonomous()
  */
 void opcontrol()
 {
+	liftTaskInit();
 	intakeInit();
 	chassisInit();
 	while (true)
 	{
 		anglerOpControl();
-		liftOpControl();
 		pros::delay(20);
 	}
 }

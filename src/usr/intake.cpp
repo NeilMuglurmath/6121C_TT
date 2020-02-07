@@ -65,6 +65,6 @@ void _intakeTask(void *param)
 
 void intakeInit()
 {
-	std::string text("Chassis");
+	std::string text("Intake");
 	pros::Task my_task(_intakeTask, &text, "");
 }

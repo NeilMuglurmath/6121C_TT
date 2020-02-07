@@ -211,6 +211,6 @@ void chassisMove(okapi::QLength x, okapi::QLength y, okapi::QAngle degrees, std:
 void chassisInit()
 {
 	deleteAutoChassis();
-	std::string text("Chassis");
-	pros::Task my_task(_chassisTask, &text, "");
+	std::string taskName("Chassis");
+	pros::Task chassisTask(_chassisTask, &taskName, "");
 }
