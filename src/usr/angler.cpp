@@ -5,11 +5,11 @@ Motor motorAngler(PORT_ANGLER, false, AbstractMotor::gearset::red, AbstractMotor
 pros::ADIAnalogIn leftLineTracker(PORT_LEFT_LINE_TRACKER);
 pros::ADIAnalogIn rightLineTracker(PORT_RIGHT_LINE_TRACKER);
 
-const int ANGLER_OUT = -1340;
-const int ANGLER_HALFWAY = -600;
-const int ANGLER_LOWER_TO = -130;
+const int ANGLER_OUT = 790;
+const int ANGLER_HALFWAY = 480;
+const int ANGLER_LOWER_TO = 130;
 
-const int CUBE_THRESHOLD = 2650;
+const int CUBE_THRESHOLD = 2750;
 
 bool anglerGoingOut = false;
 
@@ -20,22 +20,25 @@ bool isAnglerGoingOut()
 
 bool cubeIsInRollers()
 {
-	return rightLineTracker.get_value() < CUBE_THRESHOLD;
+	return rightLineTracker.get_value() < CUBE_THRESHOLD && rightLineTracker.get_value() > 200 || leftLineTracker.get_value() < CUBE_THRESHOLD && leftLineTracker.get_value() > 200;
 }
 
 void anglerOut()
 {
-	while (!cubeIsInRollers())
+	if (!cubeIsInRollers())
 	{
-		intakePower(-12000);
-		if (master.getDigital(ControllerDigital::B))
+		while (!cubeIsInRollers())
 		{
-			break;
+			intakePower(-6000);
+			if (master.getDigital(ControllerDigital::B))
+			{
+				break;
+			}
 		}
 	}
 	intakeOff();
 	int counter = 0;
-	while (motorAngler.getPosition() > ANGLER_HALFWAY)
+	while (motorAngler.getPosition() < ANGLER_HALFWAY)
 	{
 		if (counter > 4000)
 		{
@@ -47,13 +50,13 @@ void anglerOut()
 			break;
 		}
 
-		motorAngler.moveVoltage(-12000);
+		motorAngler.moveVoltage(12000);
 		counter += 20;
 		pros::delay(20);
 	}
 	counter = 0;
 	anglerGoingOut = true;
-	while (motorAngler.getPosition() > ANGLER_OUT)
+	while (motorAngler.getPosition() < ANGLER_OUT)
 	{
 		if (counter > 2000)
 		{
@@ -64,7 +67,7 @@ void anglerOut()
 			break;
 		}
 		counter += 20;
-		motorAngler.moveVoltage(-12000);
+		motorAngler.moveVoltage(7000);
 		pros::delay(20);
 	}
 	motorAngler.moveVoltage(0);
@@ -73,9 +76,9 @@ void anglerOut()
 void anglerIn()
 {
 
-	while (motorAngler.getPosition() < ANGLER_LOWER_TO)
+	while (motorAngler.getPosition() > ANGLER_LOWER_TO)
 	{
-		motorAngler.moveVoltage(12000);
+		motorAngler.moveVoltage(-12000);
 		if (master.getDigital(ControllerDigital::R2))
 		{
 			break;
@@ -85,6 +88,11 @@ void anglerIn()
 	}
 	motorAngler.moveVoltage(0);
 	anglerGoingOut = false;
+}
+
+void _anglerPrintInfo()
+{
+	printf("Power Drawn: %.1f Position: %.1f Left Tracker: %d Right Tracker: %d Cube In Rollers: %d\n", motorAngler.getPower(), motorAngler.getPosition(), leftLineTracker.get_value(), rightLineTracker.get_value(), cubeIsInRollers());
 }
 
 void anglerOpControl()
@@ -102,9 +110,5 @@ void anglerOpControl()
 
 		motorAngler.moveVoltage(0);
 	}
-}
-
-void _anglerPrintInfo()
-{
-	printf("Power Drawn: %.1f Position: %.1f Left Tracker: %d Right Tracker: %d Cube In Rollers: %d\n", motorAngler.getPower(), motorAngler.getPosition(), leftLineTracker.get_value(), rightLineTracker.get_value(), cubeIsInRollers());
+	_anglerPrintInfo();
 }

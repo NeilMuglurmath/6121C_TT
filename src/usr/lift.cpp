@@ -3,7 +3,7 @@
 Motor motorLift(PORT_LIFT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 
 const int LIFT_LOWER_LIMIT = 0;
-const int LIFT_SMALL_TOWER = 350;
+const int LIFT_SMALL_TOWER = 475;
 const int LIFT_SMALL_TOWER_DESCORE = 300;
 const int LIFT_UPPER_LIMIT = 600;
 
@@ -162,7 +162,6 @@ void _liftOpControl()
 	{
 		expand();
 	}
-	_liftPrintInfo();
 }
 
 void _liftTask(void *param)
