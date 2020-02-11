@@ -5,5 +5,5 @@ bool isAnglerGoingOut();
 void anglerOpControl();
 void anglerOut();
 void anglerIn();
-
+void lowerCubesInTray();
 #endif

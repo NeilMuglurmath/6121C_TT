@@ -20,6 +20,11 @@ void intakeOff()
 	}
 }
 
+void intakeMove(int degrees)
+{
+	intake.moveRelative(degrees, 200);
+}
+
 void intakeInAuto()
 {
 	intake.moveVelocity(150);
