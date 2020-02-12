@@ -6,5 +6,6 @@ double liftGetPosition();
 void liftTaskInit();
 void liftSmoothControlTaskInit();
 void expand();
+bool isExpanding();
 
 #endif

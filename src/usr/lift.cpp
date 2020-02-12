@@ -28,13 +28,18 @@ const int LIFT_SLOW_DISTANCE_MULTIPLIER = 0.5;
 const int LIFT_ACIVATE_PID = 30;
 
 bool liftGoingDown = false;
-
+bool expanding = false;
 bool activatedPID = false;
 
 double
 liftGetPosition()
 {
 	return motorLift.getPosition();
+}
+
+bool isExpanding()
+{
+	return expanding;
 }
 
 void _liftPower(int voltage)
@@ -188,8 +193,13 @@ void liftTaskInit()
 
 void expand()
 {
-	intakePower(-12000);
+	expanding = true;
 	liftHighTower();
+	intakePower(12000);
+	pros::delay(400);
+	intakePower(-12000);
 	pros::delay(800);
 	liftDown();
+	pros::delay(500);
+	expanding = false;
 }

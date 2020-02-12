@@ -63,7 +63,10 @@ void _intakeTask(void *param)
 {
 	while (true)
 	{
-		intakeOpControl();
+		if (!isExpanding())
+		{
+			intakeOpControl();
+		}
 		pros::delay(20);
 	}
 }
