@@ -5,14 +5,16 @@ Motor motorAngler(PORT_ANGLER, false, AbstractMotor::gearset::red, AbstractMotor
 pros::ADIAnalogIn leftLineTracker(PORT_LEFT_LINE_TRACKER);
 pros::ADIAnalogIn rightLineTracker(PORT_RIGHT_LINE_TRACKER);
 
-const int ANGLER_OUT = 690;
-const int ANGLER_HALFWAY = 360;
+const int ANGLER_OUT = 784;
+const int ANGLER_HALFWAY = 400;
 const int TURN_OFF_ROLLERS = 350;
 const int ANGLER_THREE_FOURTHS = 650;
 const int ANGLER_LOWER_TO = 130;
 
 const int ANGLER_FAST_VOLTAGE = 12000;
-const int ANGLER_SLOW_VOLTAGE = 3700;
+const int ANGLER_SLOW_VOLTAGE = 2000;
+
+const double ANGLER_KP = 30;
 
 const int CUBE_THRESHOLD = 2750;
 
@@ -21,7 +23,7 @@ bool anglerGoingOut = false;
 static int traySpeed = 0;
 
 const int TRAY_ACCEL = 50;
-const int TRAY_DECEL = 220;
+const int TRAY_DECEL = 300;
 
 bool isAnglerGoingOut()
 {
@@ -111,22 +113,28 @@ void anglerOut()
 	// 	motorAngler.moveVoltage(6000);
 	// 	pros::delay(20);
 	// }
+
+	int error = abs(motorAngler.getPosition() - ANGLER_OUT);
+	int power = 0;
+
 	while (motorAngler.getPosition() < ANGLER_OUT)
 	{
-
+		error = abs(motorAngler.getPosition() - ANGLER_OUT);
 		if (master.getDigital(ControllerDigital::R1))
 		{
 			break;
 		}
 		counter += 20;
-		if (counter > 2000)
+		power = error * ANGLER_KP;
+		if (power < ANGLER_SLOW_VOLTAGE)
 		{
-			break;
+			power = ANGLER_SLOW_VOLTAGE;
 		}
-		_traySlew(ANGLER_SLOW_VOLTAGE);
+		printf("%d\n", power);
+		_traySlew(power);
 		pros::delay(20);
 	}
-	motorAngler.moveVoltage(0);
+	motorAngler.moveAbsolute(ANGLER_OUT, 100);
 }
 
 void anglerIn()
@@ -171,5 +179,5 @@ void anglerOpControl()
 
 		motorAngler.moveVoltage(0);
 	}
-	_anglerPrintInfo();
+	// _anglerPrintInfo();
 }
