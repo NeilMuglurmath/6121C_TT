@@ -5,18 +5,23 @@ Motor motorAngler(PORT_ANGLER, false, AbstractMotor::gearset::red, AbstractMotor
 pros::ADIAnalogIn leftLineTracker(PORT_LEFT_LINE_TRACKER);
 pros::ADIAnalogIn rightLineTracker(PORT_RIGHT_LINE_TRACKER);
 
-const int ANGLER_OUT = 698;
-const int ANGLER_HALFWAY = 450;
+const int ANGLER_OUT = 699;
+const int ANGLER_HALFWAY = 360;
 const int TURN_OFF_ROLLERS = 350;
 const int ANGLER_THREE_FOURTHS = 650;
 const int ANGLER_LOWER_TO = 130;
 
-const int ANGLER_FAST_VOLTAGE = 8000;
-const int ANGLER_SLOW_VOLTAGE = 4000;
+const int ANGLER_FAST_VOLTAGE = 12000;
+const int ANGLER_SLOW_VOLTAGE = 3700;
 
 const int CUBE_THRESHOLD = 2750;
 
 bool anglerGoingOut = false;
+
+static int traySpeed = 0;
+
+const int TRAY_ACCEL = 50;
+const int TRAY_DECEL = 220;
 
 bool isAnglerGoingOut()
 {
@@ -26,6 +31,25 @@ bool isAnglerGoingOut()
 bool cubeIsInRollers()
 {
 	return rightLineTracker.get_value() < CUBE_THRESHOLD && rightLineTracker.get_value() > 200 || leftLineTracker.get_value() < CUBE_THRESHOLD && leftLineTracker.get_value() > 200;
+}
+
+void _traySlew(double trayTargetSpeed)
+{
+	int step;
+
+	if (abs(traySpeed) < abs(trayTargetSpeed))
+		step = TRAY_ACCEL;
+	else
+		step = TRAY_DECEL;
+
+	if (trayTargetSpeed > traySpeed + step)
+		traySpeed += step;
+	else if (trayTargetSpeed < traySpeed - step)
+		traySpeed -= step;
+	else
+		traySpeed = trayTargetSpeed;
+
+	motorAngler.moveVoltage(traySpeed);
 }
 
 void lowerCubesInTray()
@@ -40,7 +64,9 @@ void lowerCubesInTray()
 				break;
 			}
 		}
-		intakeMove(-100);
+		intakePower(-6000);
+		pros::delay(200);
+		intakeOff();
 	}
 }
 
@@ -66,6 +92,7 @@ void anglerOut()
 		}
 
 		motorAngler.moveVoltage(ANGLER_FAST_VOLTAGE);
+		traySpeed = ANGLER_FAST_VOLTAGE;
 		counter += 20;
 		pros::delay(20);
 	}
@@ -91,7 +118,7 @@ void anglerOut()
 		{
 			break;
 		}
-		motorAngler.moveVoltage(ANGLER_SLOW_VOLTAGE);
+		_traySlew(ANGLER_SLOW_VOLTAGE);
 		pros::delay(20);
 	}
 	motorAngler.moveVoltage(0);
@@ -116,7 +143,7 @@ void anglerIn()
 
 void _anglerPrintInfo()
 {
-	printf("Power Drawn: %.1f Position: %.1f Left Tracker: %d Right Tracker: %d Cube In Rollers: %d\n", motorAngler.getPower(), motorAngler.getPosition(), leftLineTracker.get_value(), rightLineTracker.get_value(), cubeIsInRollers());
+	printf("Power Drawn: %.1f Position: %.1f Left Tracker: %d Right Tracker: %d Cube In Rollers: %d Tray Speed: %d\n", motorAngler.getPower(), motorAngler.getPosition(), leftLineTracker.get_value(), rightLineTracker.get_value(), cubeIsInRollers(), traySpeed);
 }
 
 void anglerOpControl()

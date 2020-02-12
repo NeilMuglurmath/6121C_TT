@@ -3,7 +3,7 @@
 Controller master;
 
 const double MAX_VEL = 1.4;
-const double MAX_ACC = 1.5;
+const double MAX_ACC = 0.8;
 const double MAX_JERK = 7;
 
 QLength lastX = 0_in;

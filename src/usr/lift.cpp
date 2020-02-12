@@ -6,6 +6,7 @@ const int LIFT_LOWER_LIMIT = 0;
 const int LIFT_SMALL_TOWER = 450;
 const int LIFT_SMALL_TOWER_DESCORE = 370;
 const int LIFT_UPPER_LIMIT = 586;
+const int LIFT_TWO_STACK = 200;
 
 const double LIFT_KP = 0.0001;
 const double LIFT_KI = 0.004;
@@ -74,6 +75,10 @@ void _liftSetTarget(int target)
 	liftTarget = target;
 }
 
+void liftSecondCube()
+{
+	_liftSetTarget(LIFT_TWO_STACK);
+}
 void liftDown()
 {
 	_liftSetTarget(LIFT_LOWER_LIMIT);
