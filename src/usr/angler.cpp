@@ -5,7 +5,7 @@ Motor motorAngler(PORT_ANGLER, false, AbstractMotor::gearset::red, AbstractMotor
 pros::ADIAnalogIn leftLineTracker(PORT_LEFT_LINE_TRACKER);
 pros::ADIAnalogIn rightLineTracker(PORT_RIGHT_LINE_TRACKER);
 
-const int ANGLER_OUT = 699;
+const int ANGLER_OUT = 690;
 const int ANGLER_HALFWAY = 360;
 const int TURN_OFF_ROLLERS = 350;
 const int ANGLER_THREE_FOURTHS = 650;
@@ -115,6 +115,11 @@ void anglerOut()
 	{
 
 		if (master.getDigital(ControllerDigital::R1))
+		{
+			break;
+		}
+		counter += 20;
+		if (counter > 2000)
 		{
 			break;
 		}
