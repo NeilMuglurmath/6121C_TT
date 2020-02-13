@@ -200,11 +200,11 @@ void expand()
 {
 	expanding = true;
 	liftHighTower();
-	intakePower(12000);
-	pros::delay(400);
+	pros::delay(300);
 	intakePower(-12000);
-	pros::delay(800);
+	pros::delay(300);
 	liftDown();
+	intakeIn();
 	pros::delay(500);
 	expanding = false;
 }
