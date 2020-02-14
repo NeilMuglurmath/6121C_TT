@@ -5,16 +5,16 @@ Motor motorAngler(PORT_ANGLER, false, AbstractMotor::gearset::red, AbstractMotor
 pros::ADIAnalogIn leftLineTracker(PORT_LEFT_LINE_TRACKER);
 pros::ADIAnalogIn rightLineTracker(PORT_RIGHT_LINE_TRACKER);
 
-const int ANGLER_OUT = 784;
+const int ANGLER_OUT = 830;
 const int ANGLER_HALFWAY = 400;
 const int TURN_OFF_ROLLERS = 350;
 const int ANGLER_THREE_FOURTHS = 650;
 const int ANGLER_LOWER_TO = 130;
 
 const int ANGLER_FAST_VOLTAGE = 12000;
-const int ANGLER_SLOW_VOLTAGE = 3800;
+const int ANGLER_SLOW_VOLTAGE = 2300;
 
-const double ANGLER_KP = 30;
+const double ANGLER_KP = 23;
 
 const int CUBE_THRESHOLD = 2750;
 
@@ -99,20 +99,6 @@ void anglerOut()
 		pros::delay(20);
 	}
 	counter = 0;
-	// while (motorAngler.getPosition() < ANGLER_THREE_FOURTHS)
-	// {
-	// 	if (counter > 2000)
-	// 	{
-	// 		break;
-	// 	}
-	// 	if (master.getDigital(ControllerDigital::R1))
-	// 	{
-	// 		break;
-	// 	}
-	// 	counter += 20;
-	// 	motorAngler.moveVoltage(6000);
-	// 	pros::delay(20);
-	// }
 
 	int error = abs(motorAngler.getPosition() - ANGLER_OUT);
 	int power = 0;
@@ -135,6 +121,25 @@ void anglerOut()
 		pros::delay(20);
 	}
 	motorAngler.moveAbsolute(ANGLER_OUT, 100);
+}
+
+void anglerOutFast()
+{
+	while (motorAngler.getPosition() < ANGLER_OUT)
+	{
+
+		motorAngler.moveVoltage(12000);
+		if (master.getDigital(ControllerDigital::R1))
+		{
+			break;
+		}
+		if (motorAngler.getPosition() > TURN_OFF_ROLLERS)
+		{
+			anglerGoingOut = true;
+		}
+
+		pros::delay(20);
+	}
 }
 
 void anglerIn()
@@ -172,6 +177,11 @@ void anglerOpControl()
 	else if (master.getDigital(ControllerDigital::B))
 	{
 		lowerCubesInTray();
+	}
+
+	else if (master.getDigital(ControllerDigital::Y))
+	{
+		anglerOutFast();
 	}
 
 	else

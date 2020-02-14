@@ -3,7 +3,7 @@
 Motor motorLift(PORT_LIFT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 
 const int LIFT_LOWER_LIMIT = 0;
-const int LIFT_SMALL_TOWER = 450;
+const int LIFT_SMALL_TOWER = 420;
 const int LIFT_SMALL_TOWER_DESCORE = 370;
 const int LIFT_UPPER_LIMIT = 586;
 const int LIFT_TWO_STACK = 200;
@@ -118,34 +118,21 @@ void _liftSmoothControl(void *param)
 {
 	while (true)
 	{
-		liftError = abs(liftGetPosition() - liftTarget);
-		if (liftGetPosition() < liftTarget)
-		{
-			liftGoingDown = false;
-		}
-		else if (liftGetPosition() > liftTarget)
-		{
-			liftGoingDown = true;
-		}
-
-		if (liftError >= LIFT_DISTANCE_BEFORE_SLOW)
-		{
-			_liftSlew(liftGoingDown ? -LIFT_MAX_VOLTAGE : LIFT_MAX_VOLTAGE);
-		}
-		else if (liftError < LIFT_DISTANCE_BEFORE_SLOW && liftError >= LIFT_DISTANCE_BEFORE_ULTRA_SLOW)
-		{
-			_liftSlew(liftGoingDown ? -LIFT_SLOW_VOLTAGE : LIFT_SLOW_VOLTAGE);
-		}
-		else if (liftError < LIFT_DISTANCE_BEFORE_ULTRA_SLOW && liftError >= LIFT_ACIVATE_PID && !activatedPID)
-		{
-			_liftSlew(liftGoingDown ? -LIFT_ULTRA_SLOW : LIFT_ULTRA_SLOW);
-		}
-		else
-		{
-			activatedPID = true;
-			motorLift.moveAbsolute(liftTarget, LIFT_SLOW_VELOCITY);
-		}
-
+		// if (liftTarget != LIFT_LOWER_LIMIT)
+		// {
+		motorLift.moveAbsolute(liftTarget, 200);
+		// }
+		// else
+		// {
+		// 	if (motorLift.getPosition() > LIFT_LOWER_LIMIT + 100)
+		// 	{
+		// 		motorLift.moveVoltage(-12000);
+		// 	}
+		// 	else
+		// 	{
+		// 		motorLift.moveAbsolute(LIFT_LOWER_LIMIT, 200);
+		// 	}
+		// }
 		pros::delay(20);
 	}
 }
@@ -200,7 +187,7 @@ void expand()
 {
 	expanding = true;
 	liftHighTower();
-	pros::delay(300);
+	pros::delay(200);
 	intakePower(-12000);
 	pros::delay(300);
 	liftDown();

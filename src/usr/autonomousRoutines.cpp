@@ -12,15 +12,9 @@ void unprotected(bool blue)
     if (blue)
     {
         chassisGenerateSlowStraightPath(23_in, "gather 2 cubes", 0.8);
-        // expand();
+        expand();
         intakeIn();
         chassisExecutePath("gather 2 cubes", true, false, blue);
-        // chassisGenerateSlowStraightPath(8_in, "gather 2 stack", 0.7);
-        // chassisWaitUntilSettled();
-        // chassisExecutePath("gather 2 stack", true, false, false);
-        // liftSecondCube();
-        // pros::delay(200);
-        // liftDown();
         chassisGeneratePath(26_in, -23.75_in, 0_deg, "go to second row");
         chassisWaitUntilSettled();
         chassisExecutePath("go to second row", true, true, blue);
@@ -49,15 +43,9 @@ void unprotected(bool blue)
     else
     {
         chassisGenerateSlowStraightPath(23_in, "gather 2 cubes", 0.8);
-        // expand();
+        expand();
         intakeIn();
         chassisExecutePath("gather 2 cubes", true, false, blue);
-        // chassisGenerateSlowStraightPath(8_in, "gather 2 stack", 0.7);
-        // chassisWaitUntilSettled();
-        // chassisExecutePath("gather 2 stack", true, false, false);
-        // liftSecondCube();
-        // pros::delay(200);
-        // liftDown();
         chassisGeneratePath(26_in, -24_in, 0_deg, "go to second row");
         chassisWaitUntilSettled();
         chassisExecutePath("go to second row", true, true, blue);
@@ -90,7 +78,7 @@ void protectedSide(bool blue)
     if (blue)
     {
         chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
-        // expand();
+        expand();
         intakeIn();
         chassisExecutePath("get second cube", true, false, blue);
         chassisGenerateTurnPath(4_in, "turn to third cube");
@@ -121,8 +109,7 @@ void protectedSide(bool blue)
     else
     {
         chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
-        chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
-        // expand();
+        expand();
         intakeIn();
         chassisExecutePath("get second cube", true, false, blue);
         chassisGenerateTurnPath(4_in, "turn to third cube");
