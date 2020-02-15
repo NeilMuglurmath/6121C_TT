@@ -43,8 +43,8 @@ void competition_initialize() {}
  */
 void autonomous()
 {
-	autonomousChooserExecuteAuto();
-	// unprotected(true);
+	// autonomousChooserExecuteAuto();
+	unprotected(false);
 }
 
 /**
@@ -62,8 +62,8 @@ void autonomous()
  */
 void opcontrol()
 {
-	liftTaskInit();
 	intakeInit();
+	liftTaskInit();
 	chassisInit();
 	while (true)
 	{

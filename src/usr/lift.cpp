@@ -2,7 +2,7 @@
 
 Motor motorLift(PORT_LIFT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 
-const int LIFT_LOWER_LIMIT = 0;
+const int LIFT_LOWER_LIMIT = -20;
 const int LIFT_SMALL_TOWER = 420;
 const int LIFT_SMALL_TOWER_DESCORE = 370;
 const int LIFT_UPPER_LIMIT = 586;

@@ -12,9 +12,11 @@ const int ANGLER_THREE_FOURTHS = 650;
 const int ANGLER_LOWER_TO = 130;
 
 const int ANGLER_FAST_VOLTAGE = 12000;
+const int ANGLER_MEDIUM_VOLTAGE = 5000;
 const int ANGLER_SLOW_VOLTAGE = 2300;
 
 const double ANGLER_KP = 23;
+const double ANGLER_MEDIUM_KP = 40;
 
 const int CUBE_THRESHOLD = 2750;
 
@@ -60,22 +62,69 @@ void lowerCubesInTray()
 	{
 		while (!cubeIsInRollers())
 		{
-			intakePower(-6000);
+			intakePower(-4000);
 			if (master.getDigital(ControllerDigital::L1))
 			{
 				break;
 			}
 		}
-		intakePower(-6000);
-		pros::delay(200);
-		intakeOff();
+		intakeOffAuto();
 	}
+}
+
+void anglerOutMediumSpeed()
+{
+	int counter = 0;
+	while (motorAngler.getPosition() < ANGLER_HALFWAY)
+	{
+		if (counter > 4000)
+		{
+			break;
+		}
+		if (motorAngler.getPosition() > TURN_OFF_ROLLERS)
+		{
+			anglerGoingOut = true;
+		}
+
+		if (master.getDigital(ControllerDigital::R1))
+		{
+			break;
+		}
+
+		motorAngler.moveVoltage(ANGLER_FAST_VOLTAGE);
+		traySpeed = ANGLER_FAST_VOLTAGE;
+		counter += 20;
+		pros::delay(20);
+	}
+	counter = 0;
+
+	int error = abs(motorAngler.getPosition() - ANGLER_OUT);
+	int power = 0;
+
+	while (motorAngler.getPosition() < ANGLER_OUT - 20)
+
+	{
+		error = abs(motorAngler.getPosition() - ANGLER_OUT);
+		if (master.getDigital(ControllerDigital::R1))
+		{
+			break;
+		}
+		counter += 20;
+		power = error * ANGLER_MEDIUM_KP;
+		if (power < ANGLER_MEDIUM_VOLTAGE)
+		{
+			power = ANGLER_MEDIUM_VOLTAGE;
+		}
+		printf("%d\n", power);
+		_traySlew(power);
+		pros::delay(20);
+	}
+	motorAngler.moveAbsolute(ANGLER_OUT, 100);
 }
 
 void anglerOut()
 {
 
-	intakeOff();
 	int counter = 0;
 	while (motorAngler.getPosition() < ANGLER_HALFWAY)
 	{

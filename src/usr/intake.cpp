@@ -20,6 +20,12 @@ void intakeOff()
 	}
 }
 
+void intakeOffAuto()
+{
+	intake.moveVoltage(0);
+	intake.setBrakeMode(AbstractMotor::brakeMode::coast);
+}
+
 void intakeMove(int degrees)
 {
 	intake.moveRelative(degrees, 200);
@@ -27,7 +33,7 @@ void intakeMove(int degrees)
 
 void intakeInAuto()
 {
-	intake.moveVelocity(150);
+	intake.moveVoltage(12000);
 }
 
 void intakePower(int voltage)

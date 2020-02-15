@@ -7,4 +7,5 @@ void anglerOut();
 void anglerIn();
 void lowerCubesInTray();
 void anglerOutFast();
+void anglerOutMediumSpeed();
 #endif
