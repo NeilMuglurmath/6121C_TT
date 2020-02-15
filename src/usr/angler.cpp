@@ -12,11 +12,11 @@ const int ANGLER_THREE_FOURTHS = 650;
 const int ANGLER_LOWER_TO = 130;
 
 const int ANGLER_FAST_VOLTAGE = 12000;
-const int ANGLER_MEDIUM_VOLTAGE = 5000;
+const int ANGLER_MEDIUM_VOLTAGE = 3400;
 const int ANGLER_SLOW_VOLTAGE = 2300;
 
 const double ANGLER_KP = 23;
-const double ANGLER_MEDIUM_KP = 40;
+const double ANGLER_MEDIUM_KP = 32;
 
 const int CUBE_THRESHOLD = 2750;
 
