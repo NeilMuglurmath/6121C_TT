@@ -13,7 +13,7 @@
 
 #define PORT_LIFT 11
 
-#define PORT_INTAKE_LEFT 10
+#define PORT_INTAKE_LEFT 12
 
 #define PORT_INTAKE_RIGHT -2
 

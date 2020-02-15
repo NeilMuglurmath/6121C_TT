@@ -62,7 +62,7 @@ void lowerCubesInTray()
 	{
 		while (!cubeIsInRollers())
 		{
-			intakePower(-4000);
+			intakePower(-3800);
 			if (master.getDigital(ControllerDigital::L1))
 			{
 				break;

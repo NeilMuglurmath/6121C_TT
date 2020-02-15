@@ -15,7 +15,7 @@ void unprotected(bool blue)
         chassisExecutePath("expand forward", true, false, false);
         expand();
         intakeInAuto();
-        chassisGenerateSlowStraightPath(37_in, "gather 4 more cubes", 0.7);
+        chassisGenerateSlowStraightPath(38_in, "gather 4 more cubes", 0.7);
         chassisWaitUntilSettled();
         chassisExecutePath("gather 4 more cubes", true, false, blue);
         chassisGenerateTurnPath(1.4_in, "turn to tower cube");
@@ -30,7 +30,7 @@ void unprotected(bool blue)
         chassisGenerateStraightPath(37_in, "back to zone");
         chassisTurnWaitUntilSettled();
         chassisExecutePath("back to zone", true, true, false);
-        chassisGenerateTurnPath(6.1_in, "turn to zone");
+        chassisGenerateTurnPath(6.3_in, "turn to zone");
         chassisWaitUntilSettled();
         chassisExecuteTurnPath("turn to zone", true, blue, blue);
         lowerCubesInTray();
@@ -100,7 +100,7 @@ void protectedSide(bool blue)
         chassisGenerateStraightPath(15_in, "back from tower");
         chassisWaitUntilSettled();
         chassisExecutePath("back from tower", true, true, false);
-        chassisGenerateTurnPath(9_in, "turn to stack");
+        chassisGenerateTurnPath(9.1_in, "turn to stack");
         chassisWaitUntilSettled();
         chassisExecuteTurnPath("turn to stack", true, !blue, blue);
         chassisGenerateStraightPath(22_in, "go to stack");
@@ -109,7 +109,7 @@ void protectedSide(bool blue)
         lowerCubesInTray();
         intakeOffAuto();
         chassisWaitUntilSettled();
-        anglerOutFast();
+        anglerOutMediumSpeed();
         chassisGenerateSlowStraightPath(24_in, "back away from zone", 0.9);
         chassisExecutePath("back away from zone", true, true, false);
         pros::delay(300);
