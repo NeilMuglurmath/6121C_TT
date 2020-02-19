@@ -6,9 +6,9 @@ void intakeIn()
 {
 	intake.moveVoltage(12000);
 }
-void intakeOff()
+void intakeStop()
 {
-	if (isAnglerGoingOut())
+	if (isTrayGoingOut())
 	{
 		intake.moveVoltage(0);
 		intake.setBrakeMode(AbstractMotor::brakeMode::coast);
@@ -20,7 +20,7 @@ void intakeOff()
 	}
 }
 
-void intakeOffAuto()
+void intakeStopAuto()
 {
 	intake.moveVoltage(0);
 	intake.setBrakeMode(AbstractMotor::brakeMode::coast);
@@ -61,7 +61,7 @@ void intakeOpControl()
 
 	else
 	{
-		intakeOff();
+		intakeStop();
 	}
 }
 
@@ -79,6 +79,6 @@ void _intakeTask(void *param)
 
 void intakeInit()
 {
-	std::string text("Intake");
-	pros::Task my_task(_intakeTask, &text, "");
+	std::string taskName("Intake");
+	pros::Task intake_task(_intakeTask, &taskName, "");
 }

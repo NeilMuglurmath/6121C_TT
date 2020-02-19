@@ -3,11 +3,11 @@
 
 void intakeIn();
 void intakeInAuto();
-void intakeOff();
+void intakeStop();
 void intakePower(int voltage);
 void intakeMove(int degrees);
 void intakeOpControl();
 void intakeInit();
-void intakeOffAuto();
+void intakeStopAuto();
 
 #endif

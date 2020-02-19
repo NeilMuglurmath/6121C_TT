@@ -3,7 +3,7 @@
 
 #define PORT_RADIO 4
 
-#define PORT_ANGLER 6
+#define PORT_TRAY 6
 
 #define PORT_LEFT_BACK -3
 #define PORT_LEFT_FRONT -8

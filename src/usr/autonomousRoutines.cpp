@@ -40,8 +40,8 @@ void unprotected(bool blue)
         chassisGenerateStraightPath(12_in, "back from zone");
         pros::delay(500);
         chassisWaitUntilSettled();
-        intakeOffAuto();
-        anglerOutMediumSpeed();
+        intakeStopAuto();
+        trayOutMediumSpeed();
         chassisExecutePath("back from zone", true, true, false);
         chassisWaitUntilSettled();
     }
@@ -76,8 +76,8 @@ void unprotected(bool blue)
         chassisGenerateStraightPath(12_in, "back from zone");
         pros::delay(500);
         chassisWaitUntilSettled();
-        intakeOffAuto();
-        anglerOutMediumSpeed();
+        intakeStopAuto();
+        trayOutMediumSpeed();
         chassisExecutePath("back from zone", true, true, false);
         chassisWaitUntilSettled();
     }
@@ -107,13 +107,13 @@ void protectedSide(bool blue)
         chassisTurnWaitUntilSettled();
         chassisExecutePath("go to stack", true, false, false);
         lowerCubesInTray();
-        intakeOffAuto();
+        intakeStopAuto();
         chassisWaitUntilSettled();
-        anglerOutMediumSpeed();
+        trayOutMediumSpeed();
         chassisGenerateSlowStraightPath(24_in, "back away from zone", 0.9);
         chassisExecutePath("back away from zone", true, true, false);
         pros::delay(300);
-        anglerIn();
+        trayIn();
         chassisWaitUntilSettled();
     }
     else
@@ -138,13 +138,13 @@ void protectedSide(bool blue)
         chassisTurnWaitUntilSettled();
         chassisExecutePath("go to stack", true, false, false);
         lowerCubesInTray();
-        intakeOffAuto();
+        intakeStopAuto();
         chassisWaitUntilSettled();
-        anglerOutFast();
+        trayOutFast();
         chassisGenerateSlowStraightPath(24_in, "back away from zone", 0.9);
         chassisExecutePath("back away from zone", true, true, false);
         pros::delay(300);
-        anglerIn();
+        trayIn();
         chassisWaitUntilSettled();
     }
 }
