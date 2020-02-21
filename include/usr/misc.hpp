@@ -20,4 +20,6 @@
 #define PORT_LEFT_LINE_TRACKER 'g'
 #define PORT_RIGHT_LINE_TRACKER 'h'
 
+#define PORT_LIFT_LIMIT_SWITCH 'b'
+
 #endif

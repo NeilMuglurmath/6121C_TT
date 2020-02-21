@@ -9,5 +9,6 @@ void lowerCubesInTray();
 void trayOutFast();
 void trayOutMediumSpeed();
 void trayPIDInit();
+void trayWaitUntilSettled();
 
 #endif

@@ -9,7 +9,7 @@ const int TRAY_OUT = 840;
 const int TRAY_IN = 0;
 const int ROLLERS_OFF = 350;
 
-const double TRAY_SLOW_KP = 27;
+const double TRAY_SLOW_KP = 26;
 const double TRAY_MID_KP = 28;
 const double TRAY_FAST_KP = 32;
 
@@ -156,8 +156,21 @@ void _trayPID(void *param)
 		{
 			motorTray.moveAbsolute(trayTarget, TRAY_MIN_VEL);
 		}
-		_trayPrintInfo();
 		pros::delay(20);
+		// _trayPrintInfo();
+	}
+}
+
+void trayWaitUntilSettled()
+{
+	while (true)
+	{
+		pros::delay(20);
+		if (abs(trayError) < TRAY_THRESHOLD_ERROR)
+		{
+			break;
+		}
+		pros::delay(200);
 	}
 }
 

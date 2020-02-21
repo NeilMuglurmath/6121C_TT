@@ -45,7 +45,7 @@ void competition_initialize() {}
 void autonomous()
 {
 	autonomousChooserExecuteAuto();
-	// protectedSide(true);
+	// unprotected(false);
 }
 
 /**

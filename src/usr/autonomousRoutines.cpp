@@ -2,15 +2,17 @@
 
 void testProfiling()
 {
-    chassisGeneratePath(-12_in, -14_in, 135_deg, "turn to stack");
-    chassisExecutePath("turn to stack", true, false, false);
-    chassisWaitUntilSettled();
+    chassisGenerateStraightPath(5_in, "t");
+    trayOutMediumSpeed();
+    trayWaitUntilSettled();
+    chassisExecutePath("t", false, false, false);
 }
 
 void unprotected(bool blue)
 {
     if (blue)
     {
+        trayIn();
         chassisGenerateStraightPath(3_in, "expand forward");
         chassisExecutePath("expand forward", true, false, false);
         expand();
@@ -42,11 +44,13 @@ void unprotected(bool blue)
         chassisWaitUntilSettled();
         intakeStopAuto();
         trayOutMediumSpeed();
+        trayWaitUntilSettled();
         chassisExecutePath("back from zone", true, true, false);
         chassisWaitUntilSettled();
     }
     else
     {
+        trayIn();
         chassisGenerateStraightPath(3_in, "expand forward");
         chassisExecutePath("expand forward", true, false, false);
         expand();
@@ -78,6 +82,7 @@ void unprotected(bool blue)
         chassisWaitUntilSettled();
         intakeStopAuto();
         trayOutMediumSpeed();
+        trayWaitUntilSettled();
         chassisExecutePath("back from zone", true, true, false);
         chassisWaitUntilSettled();
     }
@@ -87,6 +92,7 @@ void protectedSide(bool blue)
 {
     if (blue)
     {
+        trayIn();
         chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
         expand();
         intakeIn();
@@ -111,6 +117,8 @@ void protectedSide(bool blue)
         chassisWaitUntilSettled();
         trayOutMediumSpeed();
         chassisGenerateSlowStraightPath(24_in, "back away from zone", 0.9);
+        trayWaitUntilSettled();
+
         chassisExecutePath("back away from zone", true, true, false);
         pros::delay(300);
         trayIn();
@@ -118,6 +126,7 @@ void protectedSide(bool blue)
     }
     else
     {
+        trayIn();
         chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
         expand();
         intakeIn();
@@ -140,8 +149,10 @@ void protectedSide(bool blue)
         lowerCubesInTray();
         intakeStopAuto();
         chassisWaitUntilSettled();
-        trayOutFast();
+        trayOutMediumSpeed();
         chassisGenerateSlowStraightPath(24_in, "back away from zone", 0.9);
+        trayWaitUntilSettled();
+
         chassisExecutePath("back away from zone", true, true, false);
         pros::delay(300);
         trayIn();

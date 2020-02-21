@@ -2,19 +2,21 @@
 
 Motor motorLift(PORT_LIFT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees);
 
+pros::ADIDigitalIn liftLimitSwitch(PORT_LIFT_LIMIT_SWITCH);
+
 const int LIFT_DOWN = 0;
-const int LIFT_SMALL_TOWER = 420;
-const int LIFT_SMALL_TOWER_DESCORE = 370;
+const int LIFT_SMALL_TOWER = 440;
+const int LIFT_SMALL_TOWER_DESCORE = 390;
 const int LIFT_UPPER_LIMIT = 586;
 
-const double LIFT_KP = 45;
+const double LIFT_KP = 35;
 const double LIFT_KI = 0;
 const double LIFT_KD = 0;
 
 const int LIFT_THRESHOLD_ERROR = 50;
 const int LIFT_MIN_VEL = 30;
 
-double liftTarget = 0;
+int liftTarget = 0;
 static double liftSpeed = 0;
 double liftError = 0;
 double liftPosition = 0;
@@ -28,6 +30,12 @@ const int LIFT_MIN_VOLTAGE = 4000;
 
 bool liftGoingDown = false;
 bool expanding = false;
+bool liftHitDown = false;
+
+bool _isLiftDown()
+{
+	return liftLimitSwitch.get_value() == 1;
+}
 
 double
 liftGetPosition()
@@ -42,8 +50,8 @@ bool isExpanding()
 
 void _liftPower(int voltage)
 {
-	motorLift.setBrakeMode(AbstractMotor::brakeMode::coast);
 	motorLift.moveVoltage(voltage);
+	motorLift.setBrakeMode(AbstractMotor::brakeMode::coast);
 }
 
 void _liftSlew(double liftTargetSpeed)
@@ -67,6 +75,7 @@ void _liftSlew(double liftTargetSpeed)
 
 void _liftSetTarget(int target)
 {
+	liftHitDown = false;
 	liftSpeed = 0;
 	liftTarget = target;
 }
@@ -88,7 +97,7 @@ void liftMidTower()
 
 void _liftPrintInfo()
 {
-	printf("Pos: %.1f Target Pos: %.1f, Error: %.1f Speed: %.1f PID Output: %.1f\n", liftPosition, liftTarget, liftError, liftSpeed, liftPIDOutput);
+	printf("Pos: %.1f Target Pos: %.1f, Error: %.1f Speed: %.1f PID Output: %.1f lift down: %d, power drawn: %.1f \n", liftPosition, liftTarget, liftError, liftSpeed, liftPIDOutput, _isLiftDown(), motorLift.getPower());
 }
 
 void _liftPID(void *param)
@@ -100,17 +109,47 @@ void _liftPID(void *param)
 		if (abs(liftError) > LIFT_THRESHOLD_ERROR)
 		{
 
-			liftPIDOutput = liftError * LIFT_KP;
-			if (liftPIDOutput > 0 && liftPIDOutput < LIFT_MIN_VOLTAGE)
-			{
-				liftPIDOutput = LIFT_MIN_VOLTAGE;
-			}
-			else if (liftPIDOutput < 0 && liftPIDOutput > -LIFT_MIN_VOLTAGE)
-			{
-				liftPIDOutput = -LIFT_MIN_VOLTAGE;
-			}
-			_liftSlew(liftPIDOutput);
+			// 	liftPIDOutput = liftError * LIFT_KP;
+			// 	if (liftPIDOutput > 0 && liftPIDOutput < LIFT_MIN_VOLTAGE)
+			// 	{
+			// 		liftPIDOutput = LIFT_MIN_VOLTAGE;
+			// 	}
+			// 	else if (liftPIDOutput < 0 && liftPIDOutput > -LIFT_MIN_VOLTAGE)
+			// 	{
+			// 		liftPIDOutput = -LIFT_MIN_VOLTAGE;
+			// 	}
+			// 	_liftPower(liftPIDOutput);
+			motorLift.moveAbsolute(liftTarget, 200);
 		}
+		else if (false)
+		{
+			if (!liftHitDown)
+			{
+				int counter = 0;
+				while (!_isLiftDown())
+				{
+					_liftPower(-LIFT_MAX_VOLTAGE);
+					counter += 20;
+					if (counter > 2000)
+					{
+						break;
+					}
+					pros::delay(20);
+				}
+				motorLift.tarePosition();
+				_liftPower(0);
+				motorLift.moveVelocity(0);
+				motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+				liftHitDown = true;
+			}
+			else
+			{
+				motorLift.moveVelocity(0);
+				motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
+			}
+			_liftPrintInfo();
+		}
+
 		else
 		{
 			motorLift.moveAbsolute(liftTarget, LIFT_MIN_VEL);
@@ -141,7 +180,6 @@ void _liftOpControl()
 	{
 		expand();
 	}
-	// _liftPrintInfo();
 }
 
 void _liftOpControlTask(void *param)
@@ -155,13 +193,13 @@ void _liftOpControlTask(void *param)
 
 void liftPIDInit()
 {
-	std::string task_name("Lift Smooth");
+	std::string task_name("Lift PID");
 	pros::Task liftSmoothTask(_liftPID, &task_name, "");
 }
 
 void liftOpControlInit()
 {
-	std::string task_name("Lift");
+	std::string task_name("Lift Op");
 	pros::Task lift_op_control(_liftOpControlTask, &lift_op_control, "");
 }
 
