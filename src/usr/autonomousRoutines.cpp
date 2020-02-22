@@ -15,19 +15,19 @@ void progSkills()
     // expand();
     intakeIn();
     chassisExecutePath("gather 4 cubes", true, false, false);
-    chassisGeneratePath(47_in, -26_in, 0_deg, "go to second row");
+    chassisGeneratePath(47_in, -25_in, 0_deg, "go to second row");
     chassisWaitUntilSettled();
     chassisExecutePath("go to second row", true, true, false);
-    chassisGenerateSlowStraightPath(53_in, "gather 4 more cubes", 0.5);
+    chassisGenerateSlowStraightPath(47_in, "gather 4 more cubes", 0.5);
     chassisWaitUntilSettled();
     chassisExecutePath("gather 4 more cubes", true, false, false);
-    chassisGenerateStraightPath(40_in, "go to stack");
+    chassisGenerateStraightPath(34_in, "go to stack");
     chassisWaitUntilSettled();
     chassisExecutePath("go to stack", true, true, false);
-    chassisGenerateTurnPath(5.8_in, "turn to stack");
+    chassisGenerateTurnPath(5.9_in, "turn to stack"); //5.8
     chassisWaitUntilSettled();
     chassisExecuteTurnPath("turn to stack", true, false, false);
-    chassisGenerateSlowStraightPath(15_in, "deploy stack", 0.9);
+    chassisGenerateSlowStraightPath(14_in, "deploy stack", 0.9);
     lowerCubesInTray();
     intakeStop();
     chassisTurnWaitUntilSettled();
@@ -41,10 +41,10 @@ void progSkills()
     chassisGenerateTurnPath(6.2_in, "turn to first tower");
     chassisWaitUntilSettled();
     chassisExecuteTurnPath("turn to first tower", true, true, true);
-    chassisGenerateStraightPath(26_in, "align to wall");
+    chassisGenerateStraightPath(29_in, "align to wall");
     chassisTurnWaitUntilSettled();
     chassisExecutePath("align to wall", true, true, false);
-    chassisGenerateStraightPath(48_in, "get tower cube");
+    chassisGenerateSlowStraightPath(48_in, "get tower cube", 0.7);
     chassisWaitUntilSettled();
     chassisExecutePath("get tower cube", true, false, false);
     pros::delay(200);
@@ -64,9 +64,9 @@ void progSkills()
     chassisGenerateStraightPath(13_in, "back from first tower");
     chassisWaitUntilSettled();
     intakePower(-6000);
-    pros::delay(400);
+    pros::delay(450);
     chassisExecutePath("back from first tower", true, true, false);
-    chassisGenerateTurnPath(4.6_in, "turn to cubes");
+    chassisGenerateTurnPath(4.5_in, "turn to cubes"); //4.6
     chassisWaitUntilSettled();
     liftDown();
     intakePower(9000);
@@ -77,7 +77,7 @@ void progSkills()
     chassisGenerateStraightPath(45_in, "go to second tower");
     chassisWaitUntilSettled();
     chassisExecutePath("go to second tower", true, true, false);
-    chassisGenerateTurnPath(7.6_in, "turn to tower");
+    chassisGenerateTurnPath(7.6_in, "turn to tower"); //7.6
     chassisWaitUntilSettled();
     chassisExecuteTurnPath("turn to tower", true, true, false);
     liftSmallTower();
@@ -85,40 +85,36 @@ void progSkills()
     chassisGenerateStraightPath(14_in, "put cube in tower");
     chassisTurnWaitUntilSettled();
     chassisExecutePath("put cube in tower", true, false, false);
-    chassisGenerateStraightPath(13_in, "back from 2 tower");
+    chassisGenerateSlowStraightPath(13_in, "back from 2 tower", 0.7);
+    chassisWaitUntilSettled();
+    intakePower(-4000);
+    chassisExecutePath("back from 2 tower", true, true, false);
+    chassisGenerateTurnPath(4_in, "turn to 3 tower 1");
+    chassisWaitUntilSettled();
+    chassisExecuteTurnPath("turn to 3 tower 1", true, false, false);
+    liftDown();
+    chassisGenerateStraightPath(19_in, "go to 3 tower 1");
+    chassisTurnWaitUntilSettled();
+    chassisExecutePath("go to 3 tower 1", true, false, false);
+    chassisGenerateTurnPath(3.7_in, "turn to 3 tower 2");
+    chassisWaitUntilSettled();
+    chassisExecuteTurnPath("turn to 3 tower 2", true, false, false);
+    chassisGenerateSlowStraightPath(27_in, "go to 3 tower 2", 0.7);
+    chassisTurnWaitUntilSettled();
+    chassisExecutePath("go to 3 tower 2", true, false, false);
+    intakePower(9000);
+    chassisGenerateStraightPath(12_in, "back from tower cube");
+    chassisWaitUntilSettled();
+    pros::delay(500);
+    chassisExecutePath("back from tower cube", true, true, false);
+    pros::delay(500);
+    liftMidTower();
+    moveCubeOut();
+    chassisGenerateStraightPath(20_in, "go to tower");
+    chassisWaitUntilSettled();
+    chassisExecutePath("go to tower", true, false, false);
     chassisWaitUntilSettled();
     intakePower(-6000);
-    pros::delay(400);
-    chassisExecutePath("back from 2 tower", true, true, false);
-
-    // trayIn();
-    // chassisGenerateSlowStraightPath(110_in, "get row", 0.6);
-    // intakeInAuto();
-    // chassisExecutePath("get row", true, false, false);
-    // chassisGenerateTurnPath(2.9_in, "turn to zone");
-    // chassisWaitUntilSettled();
-    // chassisExecuteTurnPath("turn to zone", true, false, false);
-    // chassisGenerateStraightPath(12_in, "go to zone");
-    // chassisTurnWaitUntilSettled();
-    // chassisExecutePath("go to zone", true, false, false);
-    // chassisGenerateStraightPath(15_in, "back from zone");
-    // chassisWaitUntilSettled();
-    // lowerCubesInTray();
-    // pros::delay(500);
-    // intakeStopAuto();
-    // trayOutSlow();
-    // chassisExecutePath("back from zone", true, true, false);
-    // chassisGenerateTurnPath(5_in, "turn to tower");
-    // chassisWaitUntilSettled();
-    // chassisExecuteTurnPath("turn to tower", true, true, true);
-    // chassisGenerateStraightPath(12_in, "align to wall");
-    // chassisTurnWaitUntilSettled();
-    // chassisExecutePath("align to wall", true, true, false);
-    // chassisGenerateStraightPath(40_in, "get first tower cube");
-    // chassisWaitUntilSettled();
-    // chassisExecutePath("get first tower cube", true, false, false);
-    // chassisGenerateStraightPath(12_in, "back from tower cube");
-    // chassisWaitUntilSettled();
 }
 
 void unprotected(bool blue)
