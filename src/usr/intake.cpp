@@ -26,9 +26,9 @@ void intakeStopAuto()
 	intake.setBrakeMode(AbstractMotor::brakeMode::coast);
 }
 
-void intakeMove(int degrees)
+void intakeMove(int degrees, int vel)
 {
-	intake.moveRelative(degrees, 200);
+	intake.moveRelative(degrees, vel);
 }
 
 void intakeInAuto()
@@ -69,7 +69,7 @@ void _intakeTask(void *param)
 {
 	while (true)
 	{
-		if (!isExpanding())
+		if (!liftIsDoingSomething())
 		{
 			intakeOpControl();
 		}

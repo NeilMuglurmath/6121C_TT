@@ -8,6 +8,13 @@ const int LIFT_DOWN = 0;
 const int LIFT_SMALL_TOWER = 440;
 const int LIFT_SMALL_TOWER_DESCORE = 390;
 const int LIFT_UPPER_LIMIT = 586;
+const int LIFT_TWO_STACK = 135;
+const int LIFT_FOUR_STACK = 400;
+const int LIFT_CUBE_MOVE_MAX = 300;
+const int LIFT_MOVE_UP_FROM_TARE = 3;
+
+const int INTAKE_CUBE_OUT_DIST = -500;
+const int INTAKE_CUBE_OUT_VEL = 120;
 
 const double LIFT_KP = 35;
 const double LIFT_KI = 0;
@@ -29,23 +36,23 @@ const int LIFT_MAX_VOLTAGE = 12000;
 const int LIFT_MIN_VOLTAGE = 4000;
 
 bool liftGoingDown = false;
-bool expanding = false;
+bool isLiftDoingSomething = false;
 bool liftHitDown = false;
+bool liftPaused = false;
 
 bool _isLiftDown()
 {
 	return liftLimitSwitch.get_value() == 1;
 }
 
-double
-liftGetPosition()
+double liftGetPosition()
 {
 	return motorLift.getPosition();
 }
 
-bool isExpanding()
+bool liftIsDoingSomething()
 {
-	return expanding;
+	return isLiftDoingSomething;
 }
 
 void _liftPower(int voltage)
@@ -75,7 +82,6 @@ void _liftSlew(double liftTargetSpeed)
 
 void _liftSetTarget(int target)
 {
-	liftHitDown = false;
 	liftSpeed = 0;
 	liftTarget = target;
 }
@@ -104,55 +110,46 @@ void _liftPID(void *param)
 {
 	while (true)
 	{
-		liftPosition = int(motorLift.getPosition());
-		liftError = liftTarget - liftPosition;
-		if (abs(liftError) > LIFT_THRESHOLD_ERROR)
+		if (!liftPaused)
 		{
-
-			// 	liftPIDOutput = liftError * LIFT_KP;
-			// 	if (liftPIDOutput > 0 && liftPIDOutput < LIFT_MIN_VOLTAGE)
-			// 	{
-			// 		liftPIDOutput = LIFT_MIN_VOLTAGE;
-			// 	}
-			// 	else if (liftPIDOutput < 0 && liftPIDOutput > -LIFT_MIN_VOLTAGE)
-			// 	{
-			// 		liftPIDOutput = -LIFT_MIN_VOLTAGE;
-			// 	}
-			// 	_liftPower(liftPIDOutput);
-			motorLift.moveAbsolute(liftTarget, 200);
-		}
-		else if (false)
-		{
-			if (!liftHitDown)
+			liftPosition = int(motorLift.getPosition());
+			liftError = liftTarget - liftPosition;
+			if (abs(liftError) > LIFT_THRESHOLD_ERROR && liftTarget != LIFT_DOWN)
 			{
-				int counter = 0;
-				while (!_isLiftDown())
+				motorLift.moveAbsolute(liftTarget, 200);
+			}
+			else if (liftTarget == LIFT_DOWN)
+			{
+				if (false)
 				{
-					_liftPower(-LIFT_MAX_VOLTAGE);
-					counter += 20;
-					if (counter > 2000)
+					int counter = 0;
+					while (!_isLiftDown())
 					{
-						break;
+						_liftPower(-LIFT_MAX_VOLTAGE);
+						counter += 20;
+						if (counter > 2000)
+						{
+							break;
+						}
+						pros::delay(20);
 					}
-					pros::delay(20);
+
+					motorLift.tarePosition();
+					motorLift.moveAbsolute(LIFT_MOVE_UP_FROM_TARE, 200);
+					pros::delay(200);
+					motorLift.tarePosition();
+					liftHitDown = true;
 				}
-				motorLift.tarePosition();
-				_liftPower(0);
-				motorLift.moveVelocity(0);
-				motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
-				liftHitDown = true;
+				else
+				{
+					motorLift.moveAbsolute(liftTarget, 200);
+				}
 			}
-			else
-			{
-				motorLift.moveVelocity(0);
-				motorLift.setBrakeMode(AbstractMotor::brakeMode::hold);
-			}
-			_liftPrintInfo();
 		}
 
 		else
 		{
-			motorLift.moveAbsolute(liftTarget, LIFT_MIN_VEL);
+			motorLift.moveVoltage(0);
 		}
 		pros::delay(20);
 	}
@@ -160,17 +157,27 @@ void _liftPID(void *param)
 
 void _liftOpControl()
 {
-	if (master.getDigital(ControllerDigital::up))
+	if (master.getDigital(ControllerDigital::up) && !master.getDigital(ControllerDigital::L1))
 	{
 		liftMidTower();
+		moveCubeOut();
+	}
+	else if (master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::right))
+	{
+		liftGetTwoStack();
+	}
+	else if (master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::up))
+	{
+		liftGetFourStack();
 	}
 	else if (master.getDigital(ControllerDigital::down))
 	{
 		liftDown();
 	}
-	else if (master.getDigital(ControllerDigital::right))
+	else if (master.getDigital(ControllerDigital::right) && !master.getDigital(ControllerDigital::L1))
 	{
 		liftSmallTower();
+		moveCubeOut();
 	}
 	else if (master.getDigital(ControllerDigital::left))
 	{
@@ -179,6 +186,47 @@ void _liftOpControl()
 	else if (master.getDigital(ControllerDigital::A))
 	{
 		expand();
+	}
+}
+
+void liftGetTwoStack()
+{
+	isLiftDoingSomething = true;
+	_liftSetTarget(LIFT_TWO_STACK);
+	intakeIn();
+	while (master.getDigital(ControllerDigital::L1))
+	{
+		intakeIn();
+		pros::delay(20);
+	}
+	liftDown();
+	pros::delay(400);
+	isLiftDoingSomething = false;
+}
+
+void liftGetFourStack()
+{
+	isLiftDoingSomething = true;
+	_liftSetTarget(LIFT_FOUR_STACK);
+	intakeIn();
+	while (master.getDigital(ControllerDigital::L1))
+	{
+		intakeIn();
+		pros::delay(20);
+	}
+	liftDown();
+	pros::delay(400);
+	isLiftDoingSomething = false;
+}
+
+void moveCubeOut()
+{
+	if (motorLift.getPosition() < LIFT_CUBE_MOVE_MAX)
+	{
+		isLiftDoingSomething = true;
+		intakeMove(INTAKE_CUBE_OUT_DIST, INTAKE_CUBE_OUT_VEL);
+		pros::delay(500);
+		isLiftDoingSomething = false;
 	}
 }
 
@@ -205,13 +253,16 @@ void liftOpControlInit()
 
 void expand()
 {
-	expanding = true;
+	isLiftDoingSomething = true;
 	liftMidTower();
 	pros::delay(200);
 	intakePower(-12000);
+	pros::delay(200);
+	liftPaused = true;
 	pros::delay(300);
+	liftPaused = false;
 	liftDown();
 	intakeIn();
 	pros::delay(500);
-	expanding = false;
+	isLiftDoingSomething = false;
 }

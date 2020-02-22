@@ -4,4 +4,5 @@
 void testProfiling();
 void unprotected(bool blue);
 void protectedSide(bool blue);
+void progSkills();
 #endif

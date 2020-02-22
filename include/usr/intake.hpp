@@ -5,7 +5,7 @@ void intakeIn();
 void intakeInAuto();
 void intakeStop();
 void intakePower(int voltage);
-void intakeMove(int degrees);
+void intakeMove(int degrees, int vel);
 void intakeOpControl();
 void intakeInit();
 void intakeStopAuto();

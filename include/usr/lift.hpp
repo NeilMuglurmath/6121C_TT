@@ -5,7 +5,13 @@ double liftGetPosition();
 void liftOpControlInit();
 void liftPIDInit();
 void expand();
-bool isExpanding();
+bool liftIsDoingSomething();
 void liftSecondCube();
 void liftDown();
+void liftGetTwoStack();
+void liftGetFourStack();
+void moveCubeOut();
+void liftSmallTower();
+void liftMidTower();
+
 #endif

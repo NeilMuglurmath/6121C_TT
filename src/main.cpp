@@ -44,8 +44,8 @@ void competition_initialize() {}
  */
 void autonomous()
 {
-	autonomousChooserExecuteAuto();
-	// unprotected(false);
+	// autonomousChooserExecuteAuto();
+	progSkills();
 }
 
 /**
