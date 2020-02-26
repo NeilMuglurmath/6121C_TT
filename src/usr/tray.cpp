@@ -9,7 +9,7 @@ const int TRAY_OUT = 840;
 const int TRAY_IN = 0;
 const int ROLLERS_OFF = 350;
 
-const int INTAKE_CUBE_OUT_DIST = -100;
+const int INTAKE_CUBE_OUT_DIST = -80;
 const int INTAKE_CUBE_OUT_VEL = 40;
 
 const double TRAY_SLOW_KP = 26;
@@ -89,6 +89,7 @@ void lowerCubesInTray()
 	intakeMove(INTAKE_CUBE_OUT_DIST, INTAKE_CUBE_OUT_VEL);
 	pros::delay(500);
 	intakeBusy = false;
+	intakeStop();
 }
 
 void trayOutSlow()

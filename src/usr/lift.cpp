@@ -11,10 +11,10 @@ const int LIFT_UPPER_LIMIT = 586;
 const int LIFT_TWO_STACK = 135;
 const int LIFT_FOUR_STACK = 400;
 const int LIFT_CUBE_MOVE_MAX = 300;
-const int LIFT_MOVE_UP_FROM_TARE = 3;
+const int LIFT_MOVE_UP_FROM_TARE = 4;
 
-const int INTAKE_CUBE_OUT_DIST = -500;
-const int INTAKE_CUBE_OUT_VEL = 120;
+const int INTAKE_CUBE_OUT_DIST = -300;
+const int INTAKE_CUBE_OUT_VEL = 80;
 
 const double LIFT_KP = 35;
 const double LIFT_KI = 0;
@@ -126,7 +126,12 @@ void _liftPID(void *param)
 					}
 					pros::delay(20);
 				}
+				pros::delay(300);
 				motorLift.tarePosition();
+				motorLift.moveAbsolute(LIFT_MOVE_UP_FROM_TARE, 200);
+				pros::delay(300);
+				motorLift.tarePosition();
+				liftDown();
 				liftForceDown = false;
 			}
 			else

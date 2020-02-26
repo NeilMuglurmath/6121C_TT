@@ -27,11 +27,11 @@ void progSkills()
     chassisGenerateStraightPath(34_in, "go to stack");
     chassisWaitUntilSettled();
     chassisExecutePath("go to stack", true, true, false);
-    chassisGenerateTurnPath(5.9_in, "turn to stack");
+    chassisGenerateTurnPath(5.7_in, "turn to stack");
     chassisWaitUntilSettled();
     chassisExecuteTurnPath("turn to stack", true, false, false);
     chassisGenerateSlowStraightPath(14_in, "deploy stack", 0.9);
-    lowerCubesInTray();
+    // lowerCubesInTray();
     intakeStop();
     chassisTurnWaitUntilSettled();
     chassisExecutePath("deploy stack", true, false, false);
@@ -41,7 +41,7 @@ void progSkills()
     trayOutSlow();
     trayWaitUntilSettled();
     chassisExecutePath("back away from zone", true, true, false);
-    chassisGenerateTurnPath(6.2_in, "turn to first tower");
+    chassisGenerateTurnPath(6.1_in, "turn to first tower");
     chassisWaitUntilSettled();
     chassisExecuteTurnPath("turn to first tower", true, true, true);
     chassisGenerateStraightPath(29_in, "align to wall");
@@ -53,7 +53,7 @@ void progSkills()
     pros::delay(200);
     trayIn();
     pros::delay(1200);
-    intakePower(10000);
+    intakePower(8000);
     chassisGenerateStraightPath(12_in, "back from tower cube");
     chassisWaitUntilSettled();
     pros::delay(1000);
@@ -208,7 +208,7 @@ void protectedSide(bool blue)
         trayIn();
         chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
         expand();
-        intakeIn();
+        intakePower(10000);
         chassisExecutePath("get second cube", true, false, blue);
         chassisGenerateTurnPath(4_in, "turn to third cube");
         chassisWaitUntilSettled();
@@ -242,7 +242,7 @@ void protectedSide(bool blue)
         trayIn();
         chassisGenerateSlowStraightPath(14_in, "get second cube", 1.3);
         expand();
-        intakeIn();
+        intakePower(10000);
         chassisExecutePath("get second cube", true, false, blue);
         chassisGenerateTurnPath(4_in, "turn to third cube");
         chassisWaitUntilSettled();
