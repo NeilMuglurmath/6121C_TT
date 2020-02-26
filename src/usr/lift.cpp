@@ -39,6 +39,7 @@ bool liftGoingDown = false;
 bool isLiftDoingSomething = false;
 bool liftHitDown = false;
 bool liftPaused = false;
+bool liftForceDown = false;
 
 bool _isLiftDown()
 {
@@ -112,38 +113,25 @@ void _liftPID(void *param)
 	{
 		if (!liftPaused)
 		{
-			liftPosition = int(motorLift.getPosition());
-			liftError = liftTarget - liftPosition;
-			if (abs(liftError) > LIFT_THRESHOLD_ERROR && liftTarget != LIFT_DOWN)
+			if (liftForceDown)
+			{
+				int counter = 0;
+				while (!_isLiftDown())
+				{
+					_liftPower(-LIFT_MAX_VOLTAGE);
+					counter += 20;
+					if (counter > 2000)
+					{
+						break;
+					}
+					pros::delay(20);
+				}
+				motorLift.tarePosition();
+				liftForceDown = false;
+			}
+			else
 			{
 				motorLift.moveAbsolute(liftTarget, 200);
-			}
-			else if (liftTarget == LIFT_DOWN)
-			{
-				if (false)
-				{
-					int counter = 0;
-					while (!_isLiftDown())
-					{
-						_liftPower(-LIFT_MAX_VOLTAGE);
-						counter += 20;
-						if (counter > 2000)
-						{
-							break;
-						}
-						pros::delay(20);
-					}
-
-					motorLift.tarePosition();
-					motorLift.moveAbsolute(LIFT_MOVE_UP_FROM_TARE, 200);
-					pros::delay(200);
-					motorLift.tarePosition();
-					liftHitDown = true;
-				}
-				else
-				{
-					motorLift.moveAbsolute(liftTarget, 200);
-				}
 			}
 		}
 
@@ -157,24 +145,16 @@ void _liftPID(void *param)
 
 void _liftOpControl()
 {
-	if (master.getDigital(ControllerDigital::up) && !master.getDigital(ControllerDigital::L1))
+	if (master.getDigital(ControllerDigital::up))
 	{
 		liftMidTower();
 		moveCubeOut();
-	}
-	else if (master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::right))
-	{
-		liftGetTwoStack();
-	}
-	else if (master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::up))
-	{
-		liftGetFourStack();
 	}
 	else if (master.getDigital(ControllerDigital::down))
 	{
 		liftDown();
 	}
-	else if (master.getDigital(ControllerDigital::right) && !master.getDigital(ControllerDigital::L1))
+	else if (master.getDigital(ControllerDigital::right))
 	{
 		liftSmallTower();
 		moveCubeOut();
@@ -251,16 +231,23 @@ void liftOpControlInit()
 	pros::Task lift_op_control(_liftOpControlTask, &lift_op_control, "");
 }
 
+void liftDownHard()
+{
+	liftForceDown = true;
+	_liftSetTarget(LIFT_DOWN);
+}
+
 void expand()
 {
 	isLiftDoingSomething = true;
 	liftMidTower();
 	pros::delay(200);
 	intakePower(-12000);
-	pros::delay(200);
+	pros::delay(500);
 	liftPaused = true;
-	pros::delay(300);
+	pros::delay(250);
 	liftPaused = false;
+	// liftDownHard();
 	liftDown();
 	intakeIn();
 	pros::delay(500);

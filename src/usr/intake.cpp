@@ -43,7 +43,11 @@ void intakePower(int voltage)
 
 void intakeOpControl()
 {
-	if (master.getDigital(ControllerDigital::L1))
+	if (master.getDigital(ControllerDigital::L1) && master.getDigital(ControllerDigital::L2))
+	{
+		intakePower(6000);
+	}
+	else if (master.getDigital(ControllerDigital::L1))
 	{
 		intakeIn();
 	}
@@ -51,7 +55,7 @@ void intakeOpControl()
 	{
 		if (liftGetPosition() < 1100)
 		{
-			intakePower(-6000);
+			intakePower(-8000);
 		}
 		else
 		{
@@ -69,7 +73,7 @@ void _intakeTask(void *param)
 {
 	while (true)
 	{
-		if (!liftIsDoingSomething())
+		if (!liftIsDoingSomething() && !isIntakeBusy())
 		{
 			intakeOpControl();
 		}

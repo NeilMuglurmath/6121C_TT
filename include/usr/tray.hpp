@@ -10,5 +10,6 @@ void trayOutFast();
 void trayOutMediumSpeed();
 void trayPIDInit();
 void trayWaitUntilSettled();
+bool isIntakeBusy();
 
 #endif

@@ -9,6 +9,9 @@ const int TRAY_OUT = 840;
 const int TRAY_IN = 0;
 const int ROLLERS_OFF = 350;
 
+const int INTAKE_CUBE_OUT_DIST = -100;
+const int INTAKE_CUBE_OUT_VEL = 40;
+
 const double TRAY_SLOW_KP = 26;
 const double TRAY_MID_KP = 28;
 const double TRAY_FAST_KP = 32;
@@ -38,9 +41,16 @@ double trayPIDOutput = 0;
 double trayPosition = 0;
 double trayTarget = 0;
 
+bool intakeBusy = false;
+
 bool isTrayGoingOut()
 {
 	return trayGoingOut;
+}
+
+bool isIntakeBusy()
+{
+	return intakeBusy;
 }
 
 void _traySetTarget(double target)
@@ -75,18 +85,10 @@ void _traySlew(double trayTargetSpeed)
 
 void lowerCubesInTray()
 {
-	if (!cubeIsInRollers())
-	{
-		while (!cubeIsInRollers())
-		{
-			intakePower(ROLLER_OUT_VOLTAGE);
-			if (master.getDigital(ControllerDigital::L1))
-			{
-				break;
-			}
-		}
-		intakeStop();
-	}
+	intakeBusy = true;
+	intakeMove(INTAKE_CUBE_OUT_DIST, INTAKE_CUBE_OUT_VEL);
+	pros::delay(500);
+	intakeBusy = false;
 }
 
 void trayOutSlow()
@@ -157,7 +159,6 @@ void _trayPID(void *param)
 			motorTray.moveAbsolute(trayTarget, TRAY_MIN_VEL);
 		}
 		pros::delay(20);
-		// _trayPrintInfo();
 	}
 }
 
