@@ -45,7 +45,7 @@ void competition_initialize() {}
 void autonomous()
 {
 	// autonomousChooserExecuteAuto();
-	progSkills();
+	protectedSide(false);
 }
 
 /**

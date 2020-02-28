@@ -13,8 +13,8 @@ const int LIFT_FOUR_STACK = 400;
 const int LIFT_CUBE_MOVE_MAX = 300;
 const int LIFT_MOVE_UP_FROM_TARE = 4;
 
-const int INTAKE_CUBE_OUT_DIST = -300;
-const int INTAKE_CUBE_OUT_VEL = 80;
+const int INTAKE_CUBE_OUT_DIST = -450;
+const int INTAKE_CUBE_OUT_VEL = 130;
 
 const double LIFT_KP = 35;
 const double LIFT_KI = 0;
@@ -89,6 +89,7 @@ void _liftSetTarget(int target)
 
 void liftDown()
 {
+	liftForceDown = false;
 	_liftSetTarget(LIFT_DOWN);
 }
 
@@ -168,6 +169,11 @@ void _liftOpControl()
 	{
 		_liftSetTarget(LIFT_SMALL_TOWER_DESCORE);
 	}
+	else if (master.getDigital(ControllerDigital::X))
+	{
+		liftDownHard();
+	}
+
 	else if (master.getDigital(ControllerDigital::A))
 	{
 		expand();
@@ -244,6 +250,7 @@ void liftDownHard()
 
 void expand()
 {
+	trayIn();
 	isLiftDoingSomething = true;
 	liftMidTower();
 	pros::delay(200);
@@ -256,5 +263,6 @@ void expand()
 	liftDown();
 	intakeIn();
 	pros::delay(500);
+	// liftDown();
 	isLiftDoingSomething = false;
 }

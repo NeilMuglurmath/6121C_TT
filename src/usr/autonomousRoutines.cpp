@@ -130,7 +130,7 @@ void unprotected(bool blue)
         chassisExecutePath("expand forward", true, false, false);
         expand();
         intakeInAuto();
-        chassisGenerateSlowStraightPath(38_in, "gather 4 more cubes", 0.7);
+        chassisGenerateSlowStraightPath(37_in, "gather 4 more cubes", 0.65);
         chassisWaitUntilSettled();
         chassisExecutePath("gather 4 more cubes", true, false, blue);
         chassisGenerateTurnPath(1.4_in, "turn to tower cube");
@@ -168,7 +168,7 @@ void unprotected(bool blue)
         chassisExecutePath("expand forward", true, false, false);
         expand();
         intakeInAuto();
-        chassisGenerateSlowStraightPath(37_in, "gather 4 more cubes", 0.7);
+        chassisGenerateSlowStraightPath(37_in, "gather 4 more cubes", 0.65);
         chassisWaitUntilSettled();
         chassisExecutePath("gather 4 more cubes", true, false, blue);
         chassisGenerateTurnPath(1.4_in, "turn to tower cube");
@@ -183,7 +183,7 @@ void unprotected(bool blue)
         chassisGenerateStraightPath(37_in, "back to zone");
         chassisTurnWaitUntilSettled();
         chassisExecutePath("back to zone", true, true, false);
-        chassisGenerateTurnPath(6.1_in, "turn to zone");
+        chassisGenerateTurnPath(6.3_in, "turn to zone");
         chassisWaitUntilSettled();
         chassisExecuteTurnPath("turn to zone", true, blue, blue);
         lowerCubesInTray();
@@ -210,7 +210,7 @@ void protectedSide(bool blue)
         expand();
         intakePower(10000);
         chassisExecutePath("get second cube", true, false, blue);
-        chassisGenerateTurnPath(4_in, "turn to third cube");
+        chassisGenerateTurnPath(4.1_in, "turn to third cube");
         chassisWaitUntilSettled();
         chassisExecuteTurnPath("turn to third cube", true, blue, blue);
         chassisGenerateSlowStraightPath(31_in, "get third and fourth cubes", 1);
@@ -244,7 +244,7 @@ void protectedSide(bool blue)
         expand();
         intakePower(10000);
         chassisExecutePath("get second cube", true, false, blue);
-        chassisGenerateTurnPath(4_in, "turn to third cube");
+        chassisGenerateTurnPath(4.1_in, "turn to third cube");
         chassisWaitUntilSettled();
         chassisExecuteTurnPath("turn to third cube", true, blue, blue);
         chassisGenerateSlowStraightPath(31_in, "get third and fourth cubes", 1);
