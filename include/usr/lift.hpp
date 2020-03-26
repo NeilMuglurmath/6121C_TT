@@ -8,6 +8,7 @@ void expand();
 bool liftIsDoingSomething();
 void liftSecondCube();
 void liftDown();
+void liftDownHard();
 void liftGetTwoStack();
 void liftGetFourStack();
 void moveCubeOut();

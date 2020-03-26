@@ -21,10 +21,10 @@ void progSkills()
     chassisGeneratePath(47_in, -24.75_in, 0_deg, "go to second row");
     chassisWaitUntilSettled();
     chassisExecutePath("go to second row", true, true, false);
-    chassisGenerateSlowStraightPath(47_in, "gather 4 more cubes", 0.35);
+    chassisGenerateSlowStraightPath(46_in, "gather 4 more cubes", 0.35);
     chassisWaitUntilSettled();
     chassisExecutePath("gather 4 more cubes", true, false, false);
-    chassisGenerateStraightPath(34_in, "go to stack");
+    chassisGenerateStraightPath(33_in, "go to stack");
     chassisWaitUntilSettled();
     chassisExecutePath("go to stack", true, true, false);
     chassisGenerateTurnPath(5.7_in, "turn to stack");

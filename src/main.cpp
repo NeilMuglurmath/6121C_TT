@@ -44,8 +44,7 @@ void competition_initialize() {}
  */
 void autonomous()
 {
-	// autonomousChooserExecuteAuto();
-	protectedSide(false);
+	autonomousChooserExecuteAuto();
 }
 
 /**

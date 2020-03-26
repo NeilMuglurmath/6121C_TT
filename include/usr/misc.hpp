@@ -11,7 +11,7 @@
 #define PORT_RIGHT_BACK -5
 #define PORT_RIGHT_FRONT -7
 
-#define PORT_LIFT 13
+#define PORT_LIFT 14
 
 #define PORT_INTAKE_LEFT 12
 

@@ -9,7 +9,7 @@ const int TRAY_OUT = 840;
 const int TRAY_IN = 0;
 const int ROLLERS_OFF = 350;
 
-const int INTAKE_CUBE_OUT_DIST = -300;
+const int INTAKE_CUBE_OUT_DIST = -285;
 const int INTAKE_CUBE_OUT_VEL = 60;
 
 const double TRAY_SLOW_KP = 26;
